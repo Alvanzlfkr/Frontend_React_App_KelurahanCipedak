@@ -1,0 +1,143 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
+
+/* Background full layar */
+.login-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #e9eeff;
+}
+
+/* Box login */
+.login-box {
+  width: 380px;
+  background: white;
+  padding: 35px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* <-- input jadi center */
+}
+
+/* Icon user bulat */
+.login-icon {
+  width: 75px;
+  height: 75px;
+  background: #173f2f;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  font-size: 32px;
+  margin-top: -60px;
+  margin-bottom: 10px;
+}
+
+.login-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 18px;
+  color: #333;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Input */
+.login-input {
+  width: 300px;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 6px;
+  border: 1px solid #d2dcd9;
+  background: #e3ebe9;
+  outline: none;
+  font-size: 14px;
+}
+
+/* Tombol login */
+.login-btn {
+  width: 120px;
+  padding: 10px;
+  background: #2f613f;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  margin-top: 12px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.login-btn:hover {
+  background: #244c31;
+}
+
+.login-toggle-eye {
+  position: absolute;
+  right: 15px; /* ⬅️ geser ke kiri */
+  top: 48%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #555;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.password-hint-login {
+  width: 90%;
+  margin: 6px auto 10px;
+  text-align: left;
+  padding-left: 20px; /* geser ke kanan */
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.password-hint-login ul {
+  padding-left: 0;
+  margin: 0;
+}
+
+.password-hint-login li {
+  list-style: none;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 5px 0;
+  transition: 0.3s;
+}
+
+.forgot-container {
+  display: flex;
+  align-items: center; /* Vertikal align tengah */
+  gap: 6px; /* Jarak antar teks dan tombol */
+  font-size: 14px; /* Sedikit lebih besar dan modern */
+  color: #555; /* Warna teks utama */
+  font-family: "Arial", sans-serif;
+}
+
+.forgot-text {
+  text-decoration: none; /* Tidak ada underline */
+  color: #555;
+}
+
+.reset-btn {
+  background: none;
+  border: none;
+  color: #4f46e5; /* Biru lembut */
+  cursor: pointer;
+  text-decoration: underline; /* Underline tetap ada */
+  padding: 0;
+  font: inherit;
+  transition: all 0.2s ease; /* animasi halus saat hover */
+}
+
+.reset-btn:hover {
+  color: #3730a3; /* Biru gelap saat hover */
+  transform: translateY(-1px); /* efek sedikit “angkat” */
+}

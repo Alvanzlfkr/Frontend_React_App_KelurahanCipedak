@@ -1,0 +1,150 @@
+/* ================= CONTAINER ================= */
+
+.dashboard-calendar-container {
+  position: relative; /* atau default */
+  width: 100%;
+  max-width: 360px;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15);
+
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* ================= HEADER ================= */
+
+.dashboard-calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.cal-header-select {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+
+  font-size: 20px;
+  font-weight: 700;
+  color: #22c55e;
+}
+
+.cal-nav-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.cal-nav-buttons button {
+  color: rgba(52, 199, 89, 1);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #f3f4f6;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cal-nav-buttons button:hover {
+  background: #e5e7eb;
+}
+
+/* ================= DAYS HEADER ================= */
+.dashboard-day-name {
+  font-size: 12px;
+}
+
+.dashboard-calendar-days-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+
+  margin-bottom: 10px;
+}
+
+/* ================= GRID ================= */
+
+.dashboard-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  height: 300px;
+}
+
+/* ================= CELL ================= */
+
+.dashboard-calendar-cell {
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.dashboard-calendar-cell:hover {
+  background: #f3f4f6;
+}
+
+/* ================= STATES ================= */
+
+.dashboard-calendar-cell.dimmed {
+  color: #d1d5db;
+  cursor: default;
+}
+
+.dashboard-calendar-cell.today {
+  border: 2px solid #22c55e;
+  font-weight: 700;
+}
+
+.dashboard-calendar-cell.selected {
+  background: #22c55e;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* ================= DROPDOWN ================= */
+
+.cal-header-dropdown {
+  position: absolute;
+  top: 70px;
+  left: 20px;
+
+  width: calc(100% - 40px);
+  max-height: 200px;
+  overflow-y: auto;
+
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+
+  font-size: 14px;
+}
+
+.cal-header-dropdown-item {
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.cal-header-dropdown-item:hover {
+  background: #ecfdf5;
+  color: #16a34a;
+}

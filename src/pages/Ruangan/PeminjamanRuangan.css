@@ -1,0 +1,287 @@
+/* ============================================================================
+   PEMINJAMAN RUANGAN PAGE STYLES (FIXED + RAPIH + MIRIP DATA TAMU)
+   ============================================================================ */
+
+/* ===== TOP SECTION ===== */
+body {
+  background: #f3f6fb;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.peminjaman-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 370px;
+  margin-right: 20px;
+  margin-top: 100px;
+  margin-bottom: 10px;
+}
+
+.peminjaman-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2937;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.peminjaman-filter {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  background: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #374151;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.filter-btn:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.filter-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.filter-icon span {
+  width: 14px;
+  height: 2px;
+  background: #6b7280;
+  border-radius: 1px;
+}
+
+/* ===== CALENDAR POPUP ===== */
+.status-buttons {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-status {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-approve {
+  background: #1ac15d;
+  color: white;
+}
+
+.btn-approve:hover {
+  background: #159d4b;
+}
+
+.btn-reject {
+  background: #ff3b3b;
+  color: white;
+}
+
+.btn-reject:hover {
+  background: #d63232;
+}
+
+/* ===== CONTAINER ===== */
+.peminjaman-container {
+  background: #ffffff;
+  margin-left: 360px;
+  margin-right: 20px;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== TABLE SECTION ===== */
+.table-section {
+  margin-bottom: 30px;
+}
+
+.table-month-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #374151;
+  margin-top: 25px;
+  margin-bottom: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+/* ===== TABLE ===== */
+.peminjaman-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.peminjaman-table thead {
+  background: #f9fafb;
+}
+
+.peminjaman-table th {
+  padding: 15px 8px;
+  text-align: center;
+  font-weight: 700;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  border: 1px solid #e5e7eb;
+  vertical-align: middle;
+}
+
+.peminjaman-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #1f2937;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid #e5e7eb;
+}
+
+.peminjaman-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-action {
+  padding: 6px 8px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-edit {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.btn-edit:hover {
+  background: #fde68a;
+}
+
+.btn-delete {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.btn-delete:hover {
+  background: #fecaca;
+}
+
+/* ===== RESPONSIVE ===== */
+/* --- Laptop / Tablet Landscape --- */
+@media (max-width: 1024px) {
+  .peminjaman-top,
+  .peminjaman-container {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .peminjaman-title {
+    font-size: 28px;
+  }
+
+  .filter-btn {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+}
+
+/* --- Tablet / Mobile Medium --- */
+@media (max-width: 768px) {
+  /* TITLE & FILTER TETAP SEJAJAR */
+  .peminjaman-top {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .peminjaman-title {
+    font-size: 26px;
+  }
+
+  .peminjaman-filter {
+    display: flex;
+    gap: 8px;
+  }
+
+  .filter-btn {
+    padding: 7px 12px;
+    font-size: 13px;
+  }
+
+  .peminjaman-container {
+    padding: 16px;
+  }
+
+  .peminjaman-table {
+    font-size: 12px;
+  }
+
+  .peminjaman-table th,
+  .peminjaman-table td {
+    padding: 8px 10px;
+  }
+}
+
+/* --- Mobile Kecil --- */
+@media (max-width: 480px) {
+  /* Tetap sejajar tapi space lebih rapat */
+  .peminjaman-top {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .peminjaman-title {
+    font-size: 22px;
+  }
+
+  .filter-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}

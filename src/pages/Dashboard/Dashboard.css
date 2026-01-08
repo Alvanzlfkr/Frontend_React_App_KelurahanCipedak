@@ -1,0 +1,44 @@
+body {
+  background: #f3f6fb;
+}
+
+/* wrapper dashboard */
+.dashboard-container {
+  margin-left: 380px; /* karena sidebar */
+  margin-top: 120px;
+  margin-right: 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  background: transparent;
+}
+
+/* ===== TOP ROW ===== */
+.dashboard-top {
+  display: grid;
+  grid-template-columns: 410px 1fr; /* kiri tetap, kanan fleksibel */
+  gap: 25px;
+  align-items: stretch;
+  margin-right: 20px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1300px) {
+  .dashboard-top {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .dashboard-container,
+  .dashboard-top {
+    margin-left: 0px;
+    margin-right: 50px;
+  }
+}
+@media (max-width: 500px) {
+  .dashboard-top {
+    margin-right: 80px;
+  }
+}

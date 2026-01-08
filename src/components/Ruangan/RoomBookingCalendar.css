@@ -1,0 +1,314 @@
+/* ============================================================================
+   ROOM BOOKING CALENDAR COMPONENT STYLES
+   ============================================================================ */
+
+/* ===== ROOM CALENDAR CONTAINER ===== */
+.room-calendar {
+  background: white;
+  padding: 10px 30px;
+
+  width: 100%; /* ikut parent */
+  height: calc(100%-20px);
+
+  font-family: sans-serif;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.room-calendar:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+/* ===== ROOM CALENDAR HEADER ===== */
+.room-calendar-header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+/* ====================================================================
+   ROOM CALENDAR NAV — SAMA DENGAN MINI CALENDAR
+   ==================================================================== */
+
+.room-calendar-nav {
+  display: flex;
+  gap: 4px;
+}
+
+.room-calendar-nav button {
+  background: #f9f7fc;
+  color: rgba(52, 199, 89, 1);
+
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: 0.15s ease;
+}
+
+.room-calendar-nav button:hover {
+  background: #e9fcef;
+}
+
+.room-calendar-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #5a627b;
+  margin: 0;
+}
+
+/* Legend untuk status booking */
+/* =========================================================
+   ROOM CALENDAR LEGEND — MATCH KELOLA RUANGAN
+   (FONT & TATA LETAK SAJA, UKURAN TETAP)
+   ========================================================= */
+
+.room-calendar-legend {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* legend text */
+.room-calendar-legend .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  font-size: 12px;
+  font-weight: 600;
+  /* SAMA */
+  color: rgba(90, 98, 123, 1);
+  /* SAMA */
+  font-family: Arial, Helvetica, sans-serif;
+  /* SAMA */
+}
+
+/* ===== WEEKDAYS HEADER ===== */
+.room-calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.room-weekday-name {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #4b5563;
+  padding: 6px 0;
+  text-transform: capitalize;
+}
+
+/* ===== BOOKING GRID ===== */
+.room-booking-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+/* ===== BOOKING CELL ===== */
+.booking-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #d1fae5;
+  height: 25px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #5a627b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.booking-cell:hover {
+  background: #a7f3d0;
+  transform: scale(1.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.booking-cell.busy {
+  background: #ff8d8d;
+  color: white;
+  font-weight: 600;
+}
+
+.booking-cell.busy:hover {
+  background: #ff6b6b;
+  transform: scale(1.05);
+}
+
+/* ===== CALENDAR FOOTER ===== */
+.room-calendar-footer {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-around;
+  gap: 12px;
+}
+
+.calendar-stat {
+  text-align: center;
+  flex: 1;
+}
+
+.stat-value {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+/* ===== OTHER MONTH ===== */
+.other-month {
+  background: #f1f5f9 !important;
+  color: #94a3b8 !important;
+}
+
+.other-month:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  background: #e2e8f0 !important;
+}
+
+/* ===== STATUS COLORS ===== */
+
+/* 🟩 AVAILABLE */
+.booking-cell.available {
+  background: #dcfce7;
+  color: #14532d;
+}
+
+.booking-cell.available:hover {
+  background: #bbf7d0;
+}
+
+/* 🟨 PARTIAL */
+.booking-cell.partial {
+  background: #fef08a;
+  color: #713f12;
+  font-weight: 600;
+}
+
+.booking-cell.partial:hover {
+  background: #fde047;
+}
+
+/* 🟥 FULL */
+.booking-cell.full {
+  background: #fecaca;
+  color: #7f1d1d;
+  font-weight: 700;
+}
+
+.booking-cell.full:hover {
+  background: #fca5a5;
+}
+
+/* DOT LEGEND */
+/* ===== ROOM CALENDAR LEGEND DOT (MATCH KELOLA RUANGAN) ===== */
+.room-calendar-legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* item legend */
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 12px;
+  font-weight: 400;
+  font-family: sans-serif;
+  color: #374151;
+  /* abu gelap */
+}
+
+/* dot kotak */
+.legend-item .dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 2px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* status colors */
+.legend-item .dot.available {
+  background: rgba(227, 250, 219, 1);
+  /* kosong */
+}
+
+.legend-item .dot.partial {
+  background: #ffc107;
+  /* terisi sebagian */
+}
+
+.legend-item .dot.full {
+  background: rgba(255, 96, 87, 1);
+  /* terisi */
+}
+.dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.dot.available {
+  background: rgba(227, 250, 219, 1);
+}
+
+.dot.full {
+  background: rgba(255, 96, 87, 1);
+}
+
+.dot.partial {
+  background-color: #ffc107;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes slideInRoom {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.room-calendar {
+  animation: slideInRoom 0.3s ease-out 0.1s both;
+}
+
+@media (max-width: 1250px) {
+  .room-calendar {
+    width: calc(100%-20px);
+  }
+}

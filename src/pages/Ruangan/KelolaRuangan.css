@@ -1,0 +1,280 @@
+/* ============================================================================ 
+   KELOLA RUANGAN PAGE STYLES — RESPONSIVE FIXED LIKE PEMINJAMAN PAGE
+   ============================================================================ */
+
+/* ===== BODY ===== */
+body {
+  background: #f3f6fb;
+}
+
+/* ===== TOP SECTION ===== */
+.kelola-ruangan-top {
+  margin-left: 370px;
+  margin-right: 20px;
+  margin-top: 100px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kelola-ruangan-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2937;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.kelola-ruangan-filter {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  background: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #374151;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.filter-btn:hover {
+  background: #f9fafb;
+}
+
+.filter-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.filter-icon span {
+  width: 14px;
+  height: 2px;
+  background: #6b7280;
+  border-radius: 1px;
+}
+
+/* ===== GRID CONTAINER ===== */
+.ruangan-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+/* ===== CARD ===== */
+.ruangan-card {
+  margin-left: 370px;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 25px 40px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.ruangan-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== CARD HEADER ===== */
+.ruangan-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+}
+
+.ruangan-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.ruangan-legend {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  font-style: semi-bold;
+  color: rgba(90, 98, 123, 1);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.legend-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 2px;
+}
+
+.legend-dot.available {
+  background: rgba(227, 250, 219, 1);
+}
+.legend-dot.full {
+  background: rgba(255, 96, 87, 1);
+}
+.legend-dot.partial {
+  background-color: #ffc107; /* Kuning/Oranye */
+}
+
+/* ===== CALENDAR ===== */
+.ruangan-calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.calendar-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.calendar-header-cell {
+  padding: 8px 4px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* FIXED: smaller calendar cells */
+.calendar-cell {
+  aspect-ratio: 1;
+  height: 50px;
+  width: 100%;
+  font-size: 11px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.calendar-cell.available {
+  background: rgba(227, 250, 219, 1);
+}
+
+.calendar-cell.available:hover {
+  background: #a7f3d0;
+  transform: scale(1.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-cell.full {
+  background: rgba(255, 96, 87, 1);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(252, 165, 165, 0.3);
+}
+
+.calendar-cell.full:hover {
+  background: rgba(255, 96, 87, 1);
+  box-shadow: 0 4px 8px rgba(248, 113, 113, 0.4);
+  transform: scale(1.05);
+}
+
+.calendar-cell.partial {
+  background-color: #fcc933; /* Kuning muda background */
+
+  box-shadow: 0 2px 4px rgba(252, 165, 165, 0.3);
+  font-weight: 600;
+}
+.calendar-cell.partial:hover {
+  background-color: #fcc933; /* Kuning muda background */
+  box-shadow: 0 4px 8px rgba(248, 113, 113, 0.4);
+  transform: scale(1.05);
+}
+/* Tanggal dari bulan lain */
+.other-month {
+  background: #f1f5f9 !important;
+  color: #94a3b8 !important;
+}
+
+/* Nomor tanggal di kanan bawah */
+.calendar-cell {
+  position: relative;
+}
+
+.calendar-number {
+  position: absolute;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-style: bold;
+  right: 5px;
+  bottom: 3px;
+  font-size: 10px;
+  opacity: 0.9;
+}
+/* ============================================================================ 
+   RESPONSIVE (SAMA SEPERTI PEMINJAMAN)
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+  .kelola-ruangan-top,
+  .ruangan-card {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* TITLE KIRI + FILTER KANAN TETAP SEJAJAR */
+  .kelola-ruangan-top {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  /* kecilkan ukuran biar tidak overflow */
+  .kelola-ruangan-title {
+    font-size: 26px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .kelola-ruangan-filter {
+    display: flex;
+    gap: 8px;
+  }
+
+  .filter-btn {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+  .ruangan-card {
+    padding: 16px;
+  }
+
+  .calendar-cell {
+    height: 22px;
+    font-size: 10px;
+  }
+}

@@ -1,0 +1,290 @@
+/* ============================================================================ 
+   DATA TAMU PAGE STYLES
+   ============================================================================ */
+
+/* ===== TITLE + FILTER DI LUAR CONTAINER ===== */
+body {
+  background: #f3f6fb;
+}
+
+.data-tamu-top {
+  display: flex;
+  justify-content: space-between; /* semua elemen di kiri */
+  align-items: center;
+  margin-left: 370px; /* sesuaikan sidebar */
+  margin-right: 20px;
+  margin-top: 100px;
+  margin-bottom: 10px;
+}
+
+.data-tamu-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2937;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.data-tamu-filter {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  background: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #374151;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.filter-btn:hover {
+  background: #f5f6f9;
+  border-color: #d1d5db;
+}
+
+/* icon garis tiga */
+.filter-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.filter-icon span {
+  width: 14px;
+  height: 2px;
+  background: #6b7280;
+  border-radius: 1px;
+}
+
+/* ============================================================================
+   CALENDAR POPUP
+   ============================================================================ */
+
+/* ===== CONTAINER UTAMA ===== */
+.data-tamu-container {
+  background: #ffffff;
+  margin-left: 360px;
+  margin-right: 20px;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== TABLE SECTION ===== */
+.table-section {
+  margin-bottom: 30px;
+}
+
+.table-month-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 12px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+/* ===== TABLE ===== */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.data-table thead {
+  background: #f9fafb;
+}
+
+.data-table th {
+  padding: 15px 4px;
+  text-align: left;
+  font-weight: 700;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid #e5e7eb;
+}
+
+.data-table th:first-child {
+  width: 60px;
+  text-align: center;
+}
+
+.data-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #1f2937;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid #e5e7eb;
+  padding: 10px;
+}
+
+.data-table td:first-child {
+  text-align: center;
+  font-weight: 600;
+}
+
+.data-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.btn-icon {
+  padding: 6px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-icon:hover {
+  background: #f3f4f6;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* icon di tengah */
+}
+
+.btn-action {
+  padding: 6px 8px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-edit {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.btn-edit:hover {
+  background: #fde68a;
+}
+
+.btn-delete {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.btn-delete:hover {
+  background: #fecaca;
+}
+
+.btn-panggil {
+  padding: 6px 14px;
+  background: #d1fae5;
+  color: #065f46;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-panggil:hover {
+  background: #a7f3d0;
+}
+
+/* ===== PAGINATION ===== */
+.pagination {
+  display: flex;
+  gap: 8px;
+}
+
+.pagination-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-btn:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .data-tamu-top,
+  .data-tamu-container {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .data-tamu-top {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .data-tamu-container {
+    padding: 16px;
+  }
+
+  .data-tamu-footer {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .export-buttons {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .btn-export,
+  .btn-upload {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .data-table {
+    font-size: 12px;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 10px 12px;
+  }
+}

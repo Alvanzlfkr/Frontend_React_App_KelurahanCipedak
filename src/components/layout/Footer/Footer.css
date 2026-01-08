@@ -1,0 +1,111 @@
+.footer {
+  display: flex;
+  flex-direction: column; /* buat vertikal */
+  align-items: flex-end; /* export kanan */
+  width: 100%;
+  padding: 16px 24px;
+  box-sizing: border-box;
+  gap: 12px; /* jarak antara export & pagination */
+  margin-top: -10px;
+}
+
+/* Export buttons tetap di kanan */
+.export-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* Tombol export & upload */
+.btn-export,
+.btn-upload {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+}
+
+.btn-export {
+  background: rgba(105, 140, 101, 1);
+}
+
+.btn-upload {
+  background: rgba(64, 115, 58, 1);
+}
+
+.btn-export:hover,
+.btn-upload:hover {
+  background: #047857;
+}
+
+/* Pagination center horizontal */
+.pagination {
+  display: flex;
+  justify-content: center; /* center horizontal */
+  width: 100%; /* ambil full lebar footer */
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.pagination-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.export-popup-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* ===============================
+   EXPORT POPUP
+   =============================== */
+.export-popup-wrapper {
+  position: relative;
+}
+
+.export-popup {
+  position: absolute;
+  top: 110%; /* sedikit di bawah tombol */
+  left: 0;
+  min-width: 150px;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  animation: fadeIn 0.15s ease-out;
+  overflow: hidden;
+}
+
+/* Tombol di popup */
+.export-popup button {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 14px;
+  color: #1f2937;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.export-popup button:hover {
+  background-color: #f3f4f6;
+}

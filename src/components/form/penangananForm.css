@@ -1,0 +1,84 @@
+body {
+  background: #f3f6fb;
+}
+
+.form-card-container {
+  display: flex;
+  justify-content: space-between; /* semua elemen di kiri */
+  align-items: center;
+
+  max-width: 700px;
+  margin-top: 300px;
+  margin-left: 370px;
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.form-title {
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.form-group input {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.form-group input:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.readonly-input {
+  background-color: #f4f6f8;
+  cursor: not-allowed;
+}
+
+.error-input {
+  border-color: #e74c3c;
+}
+
+.error-text {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #e74c3c;
+}
+
+.form-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-primary {
+  padding: 10px 18px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-primary:hover {
+  background-color: #2980b9;
+}

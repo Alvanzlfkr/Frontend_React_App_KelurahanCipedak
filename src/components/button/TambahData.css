@@ -1,0 +1,27 @@
+.tambah-data-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-tambah-data {
+  padding: 10px 20px;
+  background: rgba(64, 115, 58, 1);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-tambah-data:hover {
+  background: #047857;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(5, 150, 105, 0.2);
+}
+
+.btn-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

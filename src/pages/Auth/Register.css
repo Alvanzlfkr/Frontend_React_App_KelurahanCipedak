@@ -1,0 +1,190 @@
+.register-container {
+  height: 100vh;
+  background: #e9edfb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-box {
+  width: 420px;
+  background: white;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative;
+}
+
+.icon-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1px;
+}
+
+.icon-image {
+  width: 60px; /* ukuran bisa disesuaikan */
+  height: 60px;
+  object-fit: cover;
+}
+
+.icon-circle {
+  background: #1d4526;
+  color: white;
+  font-size: 40px;
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-title {
+  font-size: 22px;
+  margin-top: 10px;
+  margin-bottom: 25px;
+  color: #344767;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.register-input {
+  width: 90%;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #e8f1e8;
+  border: none;
+  border-radius: 6px;
+  outline: none;
+  font-size: 14px;
+}
+
+.register-btn {
+  width: 50%;
+  padding: 10px;
+  background: #1d4526;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+.register-btn:hover {
+  background: #16381e;
+}
+.password-wrapper {
+  position: relative;
+}
+
+.toggle-eye {
+  position: absolute;
+  right: 20px; /* ⬅️ geser ke kiri */
+  top: 40%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #555;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+/* ===== PASSWORD STRENGTH BAR ===== */
+.strength-bar {
+  width: 90%;
+  height: 6px;
+  background: #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 6px auto;
+}
+
+.strength-fill {
+  height: 100%;
+  width: 0%;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* WARNA */
+.strength-fill.weak {
+  width: 33%;
+  background: #d32f2f;
+}
+
+.strength-fill.medium {
+  width: 66%;
+  background: #f9a825;
+}
+
+.strength-fill.strong {
+  width: 100%;
+  background: #2e7d32;
+}
+
+/* ===== CHECKLIST ===== */
+.password-hint {
+  width: 90%;
+  margin: 6px auto 10px;
+  text-align: left;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.password-hint ul {
+  padding-left: 0;
+  margin: 0;
+}
+
+.password-hint li {
+  list-style: none;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0;
+  transition: 0.3s;
+}
+
+.ok {
+  color: #2e7d32;
+}
+
+.bad {
+  color: #c62828;
+}
+
+/* DISABLED BUTTON */
+.register-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Hilangkan eye bawaan browser */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none !important;
+}
+
+/* ===== ANIMASI MASUK ===== */
+.fade-in {
+  animation: fadeSlide 0.3s ease-in-out;
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

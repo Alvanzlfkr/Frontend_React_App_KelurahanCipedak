@@ -1,0 +1,234 @@
+/* ============================================================================
+   KELOLA PENANGANAN PAGE STYLES
+   ============================================================================ */
+
+/* ===== GLOBAL ===== */
+body {
+  background: #f3f6fb;
+}
+
+/* ===== TITLE & ACTION BUTTONS DI LUAR CONTAINER ===== */
+.kelola-penanganan-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 370px; /* sesuaikan sidebar */
+  margin-right: 20px;
+  margin-top: 100px;
+  margin-bottom: 10px;
+}
+
+.kelola-penanganan-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2937;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.top-action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* Icon tiga garis */
+.filter-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.filter-icon span {
+  width: 14px;
+  height: 2px;
+  background: #6b7280;
+  border-radius: 1px;
+}
+
+/* ============================================================================
+   CONTAINER UTAMA
+   ============================================================================ */
+.kelola-penanganan-container {
+  background: #ffffff;
+  margin-left: 360px;
+  margin-right: 20px;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================================================
+   TABLE SECTION
+   ============================================================================ */
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+/* ===== TABLE ===== */
+.penanganan-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-family: Arial, Helvetica, sans-serif;
+  table-layout: fixed; /* FIX AGAR LEBAR KOLOM BERFUNGSI */
+}
+
+.penanganan-table thead {
+  background: #f9fafb;
+}
+
+.penanganan-table th {
+  padding: 15px 4px;
+  text-align: center;
+  font-weight: 700;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  vertical-align: middle;
+}
+
+/* KOLOM 1 — LEBAR BESAR */
+.penanganan-table th:first-child,
+.penanganan-table td:first-child {
+  width: 330px !important;
+  white-space: nowrap;
+}
+
+/* KOLOM 2 — LEBIH KECIL */
+.penanganan-table th:nth-child(2),
+.penanganan-table td:nth-child(2) {
+  width: 170px !important;
+}
+
+/* KOLOM EDIT — PALING KECIL */
+.penanganan-table th:nth-child(3),
+.penanganan-table td:nth-child(3) {
+  width: 100px !important;
+}
+
+.penanganan-table td {
+  padding: 12px 16px;
+  border: 1px solid #e5e7eb;
+  text-align: center;
+  vertical-align: middle;
+  color: #1f2937;
+}
+
+.penanganan-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+/* ============================================================================
+   ACTION BUTTONS
+   ============================================================================ */
+.action-buttons,
+.table-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-action,
+.btn-edit,
+.btn-delete {
+  padding: 6px 8px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.btn-edit {
+  background: #fef3c7;
+  color: #92400e;
+}
+.btn-edit:hover {
+  background: #fde68a;
+}
+
+.btn-delete {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.btn-delete:hover {
+  background: #fecaca;
+}
+
+/* ============================================================================
+   TAMBAH BUTTON
+   ============================================================================ */
+.tambah-button-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-tambah {
+  padding: 10px 20px;
+  background: rgba(64, 115, 58, 1);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-tambah:hover {
+  background: #047857;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(5, 150, 105, 0.2);
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+  .kelola-penanganan-top,
+  .kelola-penanganan-container {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .kelola-penanganan-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .kelola-penanganan-container {
+    padding: 16px;
+  }
+
+  .top-action-buttons {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .btn-export,
+  .btn-upload {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .penanganan-table {
+    min-width: 650px;
+    font-size: 12px;
+  }
+
+  .penanganan-table th,
+  .penanganan-table td {
+    padding: 10px 12px;
+  }
+}

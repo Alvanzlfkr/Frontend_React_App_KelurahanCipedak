@@ -19,7 +19,7 @@ const Sidebar = () => {
     { id: "data-tamu", icon: Users, label: "Data Tamu" },
     { id: "peminjaman-ruangan", icon: FileText, label: "Peminjaman Ruangan" },
     { id: "kelola-ruangan", icon: Building2, label: "Kelola Ruangan" },
-    // { id: "kelola-penanganan", icon: UserCog, label: "Kelola Penanganan" },
+    { id: "kelola-penanganan", icon: UserCog, label: "Kelola Penanganan" },
   ];
 
   return (

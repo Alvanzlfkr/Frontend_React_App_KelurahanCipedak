@@ -48,7 +48,7 @@ const EditDataTamu = () => {
   };
 
   // Submit form
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validasi form
@@ -63,18 +63,38 @@ const EditDataTamu = () => {
       return;
     }
 
-    // Validasi nomor telepon dengan format 08xxxx
+    // Validasi nomor telepon
     const phoneRegex = /^08[0-9]{8,11}$/;
     if (!phoneRegex.test(formData.noTelepon)) {
       alert("Nomor telepon harus dimulai dengan 08 dan hanya berisi angka!");
       return;
     }
 
-    // TODO: Update data via API
-    console.log("Data yang akan diupdate:", { id, ...formData });
+    try {
+      const res = await fetch(`http://localhost:5000/api/tamu/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tanggal: formData.tanggal,
+          nama: formData.namaTamu,
+          alamat: formData.alamat,
+          noTelepon: formData.noTelepon,
+          keperluan: formData.keperluan,
+        }),
+      });
 
-    alert("Data berhasil diperbarui!");
-    navigate("/data-tamu");
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || "Gagal memperbarui data");
+      }
+
+      const data = await res.json();
+      alert("Data berhasil diperbarui!");
+      navigate("/data-tamu"); // kembali ke halaman Data Tamu
+    } catch (err) {
+      console.error(err);
+      alert("Terjadi kesalahan: " + err.message);
+    }
   };
 
   // Cancel

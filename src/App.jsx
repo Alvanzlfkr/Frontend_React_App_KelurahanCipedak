@@ -21,7 +21,7 @@ import PeminjamanRuangan from "./pages/Ruangan/PeminjamanRuangan";
 import TambahDataPeminjam from "./components/Ruangan/TambahDataPeminjam";
 import EditDataPeminjam from "./components/Ruangan/EditDataPeminjam";
 import KelolaRuangan from "./pages/Ruangan/KelolaRuangan";
-// import KelolaPenanganan from "./pages/Penanganan/KelolaPenanganan";
+import KelolaPenanganan from "./pages/Penanganan/KelolaPenanganan";
 import TambahPenanganan from "./pages/Penanganan/TambahPenanganan";
 import EditPenanganan from "./pages/Penanganan/EditPenanganan";
 import ProtectedFlowRoute from "./routes/ProtectedFlowRoute";
@@ -241,14 +241,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-        {/* <Route
+        <Route
           path="/kelola-penanganan"
           element={
             <ProtectedRoute>
               <KelolaPenanganan />
             </ProtectedRoute>
           }
-        /> */}
+        />
         <Route
           path="/kelola-penanganan/tambah"
           element={

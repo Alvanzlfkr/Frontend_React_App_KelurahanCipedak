@@ -7,12 +7,12 @@ body {
   background: #f3f6fb;
 }
 
-/* ===== TITLE & ACTION BUTTONS DI LUAR CONTAINER ===== */
+/* ===== TITLE ===== */
 .kelola-penanganan-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-left: 370px; /* sesuaikan sidebar */
+  margin-left: 370px;
   margin-right: 20px;
   margin-top: 100px;
   margin-bottom: 10px;
@@ -23,24 +23,6 @@ body {
   font-weight: 700;
   color: #1f2937;
   font-family: Arial, Helvetica, sans-serif;
-}
-
-.top-action-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-/* Icon tiga garis */
-.filter-icon {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.filter-icon span {
-  width: 14px;
-  height: 2px;
-  background: #6b7280;
-  border-radius: 1px;
 }
 
 /* ============================================================================
@@ -56,9 +38,8 @@ body {
 }
 
 /* ============================================================================
-   TABLE SECTION
+   TABLE
    ============================================================================ */
-
 .table-wrapper {
   overflow-x: auto;
   border-radius: 8px;
@@ -67,13 +48,12 @@ body {
   margin-bottom: 40px;
 }
 
-/* ===== TABLE ===== */
 .penanganan-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
   font-family: Arial, Helvetica, sans-serif;
-  table-layout: fixed; /* FIX AGAR LEBAR KOLOM BERFUNGSI */
+  table-layout: fixed;
 }
 
 .penanganan-table thead {
@@ -81,38 +61,44 @@ body {
 }
 
 .penanganan-table th {
-  padding: 15px 4px;
+  padding: 15px 8px;
   text-align: center;
   font-weight: 700;
   color: #374151;
   border: 1px solid #e5e7eb;
-  vertical-align: middle;
 }
 
-/* KOLOM 1 — LEBAR BESAR */
-.penanganan-table th:first-child,
-.penanganan-table td:first-child {
-  width: 330px !important;
-  white-space: nowrap;
+/* ===== KOLOM 1 : NAMA ===== */
+.penanganan-table th:nth-child(1),
+.penanganan-table td:nth-child(1) {
+  width: 320px;
+  padding-left: 20px;
 }
 
-/* KOLOM 2 — LEBIH KECIL */
+/* ===== KOLOM 2 : JABATAN ===== */
 .penanganan-table th:nth-child(2),
 .penanganan-table td:nth-child(2) {
-  width: 170px !important;
+  width: 200px;
+  font-weight: 600;
 }
 
-/* KOLOM EDIT — PALING KECIL */
+/* ===== KOLOM 3 : NIP ===== */
 .penanganan-table th:nth-child(3),
 .penanganan-table td:nth-child(3) {
-  width: 100px !important;
+  width: 200px;
+  font-weight: 600;
+}
+
+/* ===== KOLOM 4 : AKSI ===== */
+.penanganan-table th:nth-child(4),
+.penanganan-table td:nth-child(4) {
+  width: 160px;
 }
 
 .penanganan-table td {
-  padding: 12px 16px;
+  padding: 12px;
   border: 1px solid #e5e7eb;
   text-align: center;
-  vertical-align: middle;
   color: #1f2937;
 }
 
@@ -123,27 +109,21 @@ body {
 /* ============================================================================
    ACTION BUTTONS
    ============================================================================ */
-.action-buttons,
 .table-actions {
   display: flex;
-  align-items: center;
   justify-content: center;
   gap: 8px;
 }
 
-.btn-action,
 .btn-edit,
 .btn-delete {
-  padding: 6px 8px;
+  padding: 6px 10px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   font-size: 13px;
   font-weight: 600;
+  transition: all 0.2s ease;
 }
 
 .btn-edit {
@@ -163,7 +143,7 @@ body {
 }
 
 /* ============================================================================
-   TAMBAH BUTTON
+   TAMBAH DATA BUTTON
    ============================================================================ */
 .tambah-button-wrapper {
   display: flex;
@@ -191,7 +171,6 @@ body {
 /* ============================================================================
    RESPONSIVE
    ============================================================================ */
-
 @media (max-width: 1024px) {
   .kelola-penanganan-top,
   .kelola-penanganan-container {
@@ -211,24 +190,8 @@ body {
     padding: 16px;
   }
 
-  .top-action-buttons {
-    width: 100%;
-    flex-direction: column;
-  }
-
-  .btn-export,
-  .btn-upload {
-    width: 100%;
-    justify-content: center;
-  }
-
   .penanganan-table {
     min-width: 650px;
     font-size: 12px;
-  }
-
-  .penanganan-table th,
-  .penanganan-table td {
-    padding: 10px 12px;
   }
 }

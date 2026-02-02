@@ -281,6 +281,32 @@
   }
 }
 
+/* ===== ERROR TEXT (VALIDASI) ===== */
+.error-text {
+  font-size: 13px;
+  color: #ef4444;
+  margin-top: -4px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* khusus untuk error di bawah date input */
+.form-group .error-text {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+/* animasi halus */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ===== HELPER TEXT ===== */
 .form-helper {
   font-size: 13px;

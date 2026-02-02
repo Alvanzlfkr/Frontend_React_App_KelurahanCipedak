@@ -117,7 +117,7 @@ const EditDataPeminjam = () => {
     if (startMin >= breakStart && startMin < breakEnd) {
       showSnackbar(
         "Tidak boleh mulai di jam istirahat (12:00 – 13:00)",
-        "warning"
+        "warning",
       );
       return false;
     }
@@ -126,7 +126,7 @@ const EditDataPeminjam = () => {
     if (endMin > breakStart && endMin < minEndAfterBreak) {
       showSnackbar(
         "Jam selesai tidak boleh antara 12:01 – 13:29. Minimal jam selesai 13:30",
-        "warning"
+        "warning",
       );
       return false;
     }
@@ -149,6 +149,7 @@ const EditDataPeminjam = () => {
     startTime: "",
     endTime: "",
     barang: "",
+    tanggalKembaliBarang: "",
     keperluan: "",
   });
 
@@ -174,14 +175,13 @@ const EditDataPeminjam = () => {
 
   // ===================== FETCH DATA (JIKA REFRESH) =====================
   useEffect(() => {
-    if (peminjamFromState) return;
     if (!id) return;
 
     fetch(`http://localhost:5000/api/peminjaman/${id}`)
       .then((res) => res.json())
       .then(setPeminjamData)
       .catch(console.error);
-  }, [id, peminjamFromState]);
+  }, [id]);
 
   // ===================== LOAD DATA KE FORM =====================
   useEffect(() => {
@@ -209,6 +209,9 @@ const EditDataPeminjam = () => {
       startTime: isRptra ? peminjamData.jam_mulai?.slice(0, 5) || "" : "",
       endTime: isRptra ? peminjamData.jam_selesai?.slice(0, 5) || "" : "",
       barang: peminjamData.barang || "",
+      tanggalKembaliBarang: peminjamData.tanggal_kembali_barang
+        ? dayjs(peminjamData.tanggal_kembali_barang).format("YYYY-MM-DD")
+        : "",
       keperluan: peminjamData.keperluan || "",
     });
   }, [peminjamData, listRuangan]);
@@ -218,15 +221,26 @@ const EditDataPeminjam = () => {
     return r?.tipe === "RPTRA";
   };
 
+  const isJamRPTRAChanged =
+    peminjamData &&
+    (formData.startTime !== peminjamData.jam_mulai?.slice(0, 5) ||
+      formData.endTime !== peminjamData.jam_selesai?.slice(0, 5));
+
   // ===================== CEK BOOKING =====================
   useEffect(() => {
     if (!formData.tanggalPinjam || !formData.ruangan) return;
 
     fetch(
-      `http://localhost:5000/api/peminjaman/cek?ruangan_id=${formData.ruangan}&tanggal_pinjam=${formData.tanggalPinjam}&exclude_id=${id}`
+      `http://localhost:5000/api/peminjaman/cek?ruangan_id=${formData.ruangan}&tanggal_pinjam=${formData.tanggalPinjam}&exclude_id=${id}`,
     )
       .then((res) => res.json())
       .then((data) => {
+        if (!Array.isArray(data)) {
+          setDisabledSesi([]);
+          setBookedTimes([]);
+          return;
+        }
+
         const sesiTerisi = data.map((d) => d.sesi).filter(Boolean);
 
         const sesiKonflik = new Set();
@@ -258,7 +272,7 @@ const EditDataPeminjam = () => {
             .map((d) => ({
               start: d.jam_mulai.slice(0, 5),
               end: d.jam_selesai.slice(0, 5),
-            }))
+            })),
         );
       })
       .catch(console.error);
@@ -341,8 +355,29 @@ const EditDataPeminjam = () => {
       [name]: value,
     }));
   };
+
+  const isEditableTanggalPinjam = peminjamData?.status === "PENDING";
+
+  // ===================== VALIDASI FORM =====================
   const validateForm = () => {
     const newErrors = {};
+
+    const isTanggalKembaliChanged =
+      peminjamData &&
+      formData.tanggalKembaliBarang !==
+        (peminjamData.tanggal_kembali_barang
+          ? dayjs(peminjamData.tanggal_kembali_barang).format("YYYY-MM-DD")
+          : "");
+
+    if (formData.tanggalKembaliBarang && isTanggalKembaliChanged) {
+      if (
+        new Date(formData.tanggalKembaliBarang) <
+        new Date(formData.tanggalPinjam)
+      ) {
+        newErrors.tanggalKembaliBarang =
+          "Tanggal kembali tidak boleh lebih kecil dari tanggal pinjam";
+      }
+    }
 
     if (!formData.namaPeminjam.trim())
       newErrors.namaPeminjam = "Nama wajib diisi";
@@ -359,7 +394,6 @@ const EditDataPeminjam = () => {
 
     if (!formData.ruangan) newErrors.ruangan = "Ruangan wajib dipilih";
 
-    // ❗ hanya NON-RPTRA wajib sesi
     if (!isSelectedRoomRPTRA() && !formData.sesi)
       newErrors.sesi = "Sesi wajib dipilih";
 
@@ -381,28 +415,39 @@ const EditDataPeminjam = () => {
 
     // validasi khusus booking / RPTRA
     if (isRPTRA()) {
-      if (!validateRPTRA()) return;
+      // 🔥 VALIDASI JAM HANYA JIKA JAM DIUBAH
+      if (isJamRPTRAChanged) {
+        if (!validateRPTRA()) return;
+      }
     } else {
-      if (disabledSesi.includes(formData.sesi)) {
+      if (
+        disabledSesi.includes(formData.sesi) &&
+        formData.sesi !== peminjamData?.sesi
+      ) {
         showSnackbar("Sesi sudah dibooking, silakan pilih sesi lain");
         return;
       }
     }
 
     const payload = {
-      tanggal: formData.tanggal, // ❗ tetap
+      tanggal: formData.tanggal,
       nama_peminjam: formData.namaPeminjam,
       jabatan: formData.jabatan,
       nik: formData.nik,
       alamat: formData.alamat,
       no_telepon: formData.noTelepon,
-      tanggal_pinjam: formData.tanggalPinjam,
       ruangan_id: parseInt(formData.ruangan),
-      barang: formData.barang?.trim() || null, // ❌ tidak divalidasi
+      tanggal_kembali_barang: formData.tanggalKembaliBarang || null,
+      barang: formData.barang?.trim() || null,
       keperluan: formData.keperluan,
       sesi: isRPTRA() ? null : formData.sesi,
       jam_mulai: isRPTRA() ? formData.startTime : null,
       jam_selesai: isRPTRA() ? formData.endTime : null,
+
+      // 🔥 INI KUNCI NYA
+      tanggal_pinjam: isEditableTanggalPinjam
+        ? formData.tanggalPinjam
+        : dayjs(peminjamData.tanggal_pinjam).format("YYYY-MM-DD"),
     };
 
     try {
@@ -412,7 +457,12 @@ const EditDataPeminjam = () => {
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error();
+      const result = await res.json();
+
+      if (!res.ok) {
+        showSnackbar(result.error || "Gagal update data");
+        return;
+      }
 
       showSnackbar("Data berhasil diperbarui", "success");
       navigate("/peminjaman-ruangan");
@@ -495,7 +545,13 @@ const EditDataPeminjam = () => {
                     name="nik"
                     value={formData.nik}
                     onChange={handleChange}
-                    className={`form-input ${errors.nik ? "error" : ""}`}
+                    className={`form-input ${
+                      submitted
+                        ? errors.nik
+                          ? "input-error"
+                          : "input-success"
+                        : ""
+                    }`}
                   />
                   {errors.nik && (
                     <small className="error-text">{errors.nik}</small>
@@ -520,19 +576,34 @@ const EditDataPeminjam = () => {
                     name="noTelepon"
                     value={formData.noTelepon}
                     onChange={handleChange}
-                    className="form-input"
+                    className={`form-input ${
+                      submitted
+                        ? errors.noTelepon
+                          ? "input-error"
+                          : "input-success"
+                        : ""
+                    }`}
+                    placeholder="08xxxxxxxxxx"
                   />
                 </div>
-
-                <input
-                  type="date"
-                  name="tanggalPinjam"
-                  value={formData.tanggalPinjam}
-                  onChange={handleChange}
-                  className={`form-input ${
-                    errors.tanggalPinjam ? "error" : ""
-                  }`}
-                />
+                <div className="form-group">
+                  <label>Tanggal Pinjam</label>
+                  <input
+                    type="date"
+                    name="tanggalPinjam"
+                    value={formData.tanggalPinjam}
+                    onChange={handleChange}
+                    disabled={!isEditableTanggalPinjam}
+                    className={`form-input ${
+                      errors.tanggalPinjam ? "error" : ""
+                    }`}
+                  />
+                  {!isEditableTanggalPinjam && (
+                    <small style={{ color: "#777" }}>
+                      Tanggal pinjam tidak dapat diubah setelah divalidasi
+                    </small>
+                  )}
+                </div>
                 {errors.tanggalPinjam && (
                   <small className="error-text">{errors.tanggalPinjam}</small>
                 )}
@@ -652,7 +723,28 @@ const EditDataPeminjam = () => {
                     className="form-input"
                   />
                 </div>
-
+                <div className="form-group">
+                  <label>Tanggal Kembali</label>
+                  <input
+                    type="date"
+                    name="tanggalKembaliBarang"
+                    value={formData.tanggalKembaliBarang}
+                    onChange={handleChange}
+                    className={`form-input ${
+                      submitted && errors.tanggalKembaliBarang
+                        ? "input-error"
+                        : ""
+                    }`}
+                  />
+                  {submitted && errors.tanggalKembaliBarang && (
+                    <small className="error-text">
+                      {errors.tanggalKembaliBarang}
+                    </small>
+                  )}
+                  <small style={{ color: "#777" }}>
+                    (Opsional, diisi jika barang langsung dikembalikan)
+                  </small>
+                </div>
                 <div className="form-group">
                   <label>Keperluan</label>
                   <textarea

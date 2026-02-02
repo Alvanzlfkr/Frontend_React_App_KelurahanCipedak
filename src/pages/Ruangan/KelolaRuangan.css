@@ -161,7 +161,7 @@ body {
 }
 
 /* FIXED: smaller calendar cells */
-.calendar-cell {
+.calendar-cell-kelola {
   aspect-ratio: 1;
   height: 50px;
   width: 100%;
@@ -175,36 +175,36 @@ body {
   transition: all 0.2s ease;
 }
 
-.calendar-cell.available {
+.calendar-cell-kelola.available {
   background: rgba(227, 250, 219, 1);
 }
 
-.calendar-cell.available:hover {
+.calendar-cell-kelola.available:hover {
   background: #a7f3d0;
   transform: scale(1.05);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.calendar-cell.full {
+.calendar-cell-kelola.full {
   background: rgba(255, 96, 87, 1);
   color: white;
   font-weight: 600;
   box-shadow: 0 2px 4px rgba(252, 165, 165, 0.3);
 }
 
-.calendar-cell.full:hover {
+.calendar-cell-kelola.full:hover {
   background: rgba(255, 96, 87, 1);
   box-shadow: 0 4px 8px rgba(248, 113, 113, 0.4);
   transform: scale(1.05);
 }
 
-.calendar-cell.partial {
+.calendar-cell-kelola.partial {
   background-color: #fcc933; /* Kuning muda background */
 
   box-shadow: 0 2px 4px rgba(252, 165, 165, 0.3);
   font-weight: 600;
 }
-.calendar-cell.partial:hover {
+.calendar-cell-kelola.partial:hover {
   background-color: #fcc933; /* Kuning muda background */
   box-shadow: 0 4px 8px rgba(248, 113, 113, 0.4);
   transform: scale(1.05);
@@ -216,7 +216,7 @@ body {
 }
 
 /* Nomor tanggal di kanan bawah */
-.calendar-cell {
+.calendar-cell-kelola {
   position: relative;
 }
 
@@ -273,7 +273,7 @@ body {
     padding: 16px;
   }
 
-  .calendar-cell {
+  .calendar-cell-kelola {
     height: 22px;
     font-size: 10px;
   }

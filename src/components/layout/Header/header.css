@@ -311,6 +311,7 @@
 .mobile-sidebar {
   width: 260px;
   height: 100%;
+  margin-top: 80px;
   background: rgba(30, 53, 42, 1);
   padding: 20px 16px;
   box-shadow: 4px 0 12px rgba(0, 0, 0, 0.2);

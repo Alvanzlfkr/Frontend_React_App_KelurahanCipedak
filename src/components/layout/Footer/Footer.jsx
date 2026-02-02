@@ -6,6 +6,7 @@ const Footer = ({
   onExportTable,
   onExportMonth,
   onExportAll,
+  onExportYear,
   onUpload,
   handlePrevDate,
   handleNextDate,
@@ -47,8 +48,9 @@ const Footer = ({
 
           {showExportPopup && (
             <div className="export-popup" ref={popupRef}>
-              <button onClick={onExportTable}>Tanggal Ini</button>
+              <button onClick={onExportTable}>Hari Ini</button>
               <button onClick={onExportMonth}>Bulan Ini</button>
+              <button onClick={onExportYear}>Tahun Ini</button>
               <button onClick={onExportAll}>Semua</button>
             </div>
           )}

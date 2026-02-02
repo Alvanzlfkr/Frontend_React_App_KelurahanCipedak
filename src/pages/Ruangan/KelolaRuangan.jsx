@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { fetchBookings, fetchRooms } from "../../utils/fetch/fetch";
 import Sidebar from "../../components/layout/Sidebar/Sidebar";
 import Header from "../../components/layout/Header/Header";
 import CalendarWidget from "../../components/modals/CalendarWidget";
@@ -37,21 +38,20 @@ const KelolaRuangan = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // FETCH DATA
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const roomsRes = await fetch("http://localhost:5000/api/ruangan");
-        const roomsData = await roomsRes.json();
 
-        const bookingsRes = await fetch("http://localhost:5000/api/peminjaman");
-        const bookingsData = await bookingsRes.json();
+        const [roomsData, bookingsData] = await Promise.all([
+          fetchRooms(),
+          fetchBookings(),
+        ]);
 
-        setRooms(roomsData || []);
-        setBookings(bookingsData || []);
+        setRooms(roomsData);
+        setBookings(bookingsData);
       } catch (err) {
-        console.error("Failed to fetch data", err);
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -189,11 +189,15 @@ const KelolaRuangan = () => {
     for (let i = 1; i <= totalDays; i++) {
       days.push({ day: i, isCurrentMonth: true });
     }
-    while (days.length < 42) {
-      days.push({
-        day: days.length - (firstDay + totalDays) + 1,
-        isCurrentMonth: false,
-      });
+    const remaining = days.length % 7;
+    if (remaining !== 0) {
+      const fill = 7 - remaining;
+      for (let i = 1; i <= fill; i++) {
+        days.push({
+          day: i,
+          isCurrentMonth: false,
+        });
+      }
     }
     return days;
   }, [month, year]);
@@ -373,7 +377,7 @@ const KelolaRuangan = () => {
                         .map((d, i) => (
                           <div
                             key={i}
-                            className={`calendar-cell ${getDayClass(
+                            className={`calendar-cell-kelola ${getDayClass(
                               ruangan,
                               d.day,
                               d.isCurrentMonth

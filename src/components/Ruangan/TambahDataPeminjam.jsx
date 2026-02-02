@@ -67,6 +67,7 @@ const TambahDataPeminjam = () => {
     startTime: "",
     endTime: "",
     barang: "",
+    tanggalKembaliBarang: "",
     keperluan: "",
   });
 
@@ -378,6 +379,18 @@ const TambahDataPeminjam = () => {
     if (!isSelectedRoomRPTRA() && !formData.sesi)
       newErrors.sesi = "Sesi wajib dipilih";
 
+    if (
+      formData.tanggalKembaliBarang &&
+      formData.tanggalPinjam &&
+      dayjs(formData.tanggalKembaliBarang).isBefore(
+        dayjs(formData.tanggalPinjam),
+        "day"
+      )
+    ) {
+      newErrors.tanggalKembaliBarang =
+        "Tanggal kembali tidak boleh sebelum tanggal pinjam";
+    }
+
     if (!formData.keperluan) newErrors.keperluan = "Keperluan wajib diisi";
 
     setErrors(newErrors);
@@ -407,6 +420,7 @@ const TambahDataPeminjam = () => {
       tanggal_pinjam: formData.tanggalPinjam,
       ruangan_id: formData.ruangan, // Langsung pakai ID
       barang: formData.barang?.trim() || null,
+      tanggal_kembali_barang: formData.tanggalKembaliBarang || null,
       keperluan: formData.keperluan,
 
       // Logic payload
@@ -701,6 +715,29 @@ const TambahDataPeminjam = () => {
                     onChange={handleChange}
                     className="form-input"
                   />
+                </div>
+
+                <div className="form-group">
+                  <label>Tanggal Kembali</label>
+                  <input
+                    type="date"
+                    name="tanggalKembaliBarang"
+                    value={formData.tanggalKembaliBarang}
+                    onChange={handleChange}
+                    className={`form-input ${
+                      submitted && errors.tanggalKembaliBarang
+                        ? "input-error"
+                        : ""
+                    }`}
+                  />
+                  {submitted && errors.tanggalKembaliBarang && (
+                    <small className="error-text">
+                      {errors.tanggalKembaliBarang}
+                    </small>
+                  )}
+                  <small style={{ color: "#777" }}>
+                    (Opsional, diisi jika barang langsung dikembalikan)
+                  </small>
                 </div>
 
                 <div className="form-group">

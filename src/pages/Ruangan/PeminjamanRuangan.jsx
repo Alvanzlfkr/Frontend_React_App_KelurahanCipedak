@@ -95,24 +95,45 @@ const PeminjamanRuangan = () => {
     next.setDate(next.getDate() + 1);
     setSelectedDate(next);
   };
+
+  const [pejabat, setPejabat] = useState({
+    lurah: null,
+    sekretaris: null,
+  });
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/penanganan")
+      .then((res) => res.json())
+      .then((data) => {
+        setPejabat({
+          lurah: data.find((p) => p.jabatan === "Lurah"),
+          sekretaris: data.find((p) => p.jabatan === "Sekretaris"),
+        });
+      });
+  }, []);
   const handleCetakSurat = () => {
     const row = data.find((d) => d.id === Number(selectedPeminjamId));
     if (!row) return;
 
-    generateSuratPeminjamanPDF({
-      nama: row.nama_peminjam,
-      jabatan: row.jabatan || "-",
-      nik: row.nik || "-",
-      alamat: row.alamat || "-",
-      telp: row.no_telepon || "-",
-      tanggal_pinjam: row.tanggal_pinjam, // ✅ INI PENTING
-      waktu:
-        row.sesi ||
-        `${row.jam_mulai?.slice(0, 5)} - ${row.jam_selesai?.slice(0, 5)}`,
-      alat: row.barang ? row.barang.split(",").map((item) => item.trim()) : [],
-      tanggal_kembali: row.tanggal_kembali || "-",
-      keperluan: row.keperluan || "-",
-    });
+    generateSuratPeminjamanPDF(
+      {
+        nama: row.nama_peminjam,
+        jabatan: row.jabatan || "-",
+        nik: row.nik || "-",
+        alamat: row.alamat || "-",
+        telp: row.no_telepon || "-",
+        tanggal_pinjam: row.tanggal_pinjam,
+        waktu:
+          row.sesi ||
+          `${row.jam_mulai?.slice(0, 5)} - ${row.jam_selesai?.slice(0, 5)}`,
+        alat: row.barang
+          ? row.barang.split(",").map((item) => item.trim())
+          : [],
+        tanggal_kembali: row.tanggal_kembali || "-",
+        keperluan: row.keperluan || "-",
+      },
+      pejabat,
+    );
 
     setShowPilihPeminjam(false);
     setSelectedPeminjamId(null);
@@ -131,7 +152,7 @@ const PeminjamanRuangan = () => {
     try {
       const res = await fetch(
         `http://localhost:5000/api/peminjaman/${item.id}`,
-        { method: "DELETE" }
+        { method: "DELETE" },
       );
       if (!res.ok) throw new Error("Gagal hapus");
       fetchData();
@@ -161,12 +182,12 @@ const PeminjamanRuangan = () => {
             status: "DISETUJUI",
             admin_id: 1,
           }),
-        }
+        },
       );
 
       if (!res.ok) throw new Error("Gagal validasi");
 
-      alert("Peminjaman berhasil disetujui ✅"); // ✅ TAMBAHKAN
+      alert("Peminjaman berhasil disetujui ✅");
       await res.json();
       fetchData();
     } catch (err) {
@@ -187,7 +208,7 @@ const PeminjamanRuangan = () => {
             status: "DITOLAK",
             admin_id: 1,
           }),
-        }
+        },
       );
 
       if (!res.ok) throw new Error("Gagal validasi");
@@ -198,6 +219,19 @@ const PeminjamanRuangan = () => {
     } catch (err) {
       alert("Gagal menolak peminjaman ❌");
     }
+  };
+
+  const onExportYear = () => {
+    const year = dayjs(selectedDate).year();
+
+    const yearData = data.filter((item) => dayjs(item.tanggal).year() === year);
+
+    exportPeminjamanRuanganExcel(
+      yearData,
+      pejabat,
+      `Peminjaman_Tahun_${year}.xlsx`,
+      `DATA PEMINJAMAN RUANGAN TAHUN ${year}`,
+    );
   };
 
   // ==================== DISABLE TAMBAH DATA JIKA TANGGAL LEWAT ====================
@@ -261,7 +295,7 @@ const PeminjamanRuangan = () => {
           <div className="table-section">
             <h3 className="table-month-title">
               Data Peminjaman{" "}
-              {dayjs(selectedDate).locale("id").format("dddd, DD MMMM YYYY")}
+              {dayjs(selectedDate).locale("id").format("dddd, D MMMM YYYY")}
             </h3>
 
             <div className="table-wrapper">
@@ -299,7 +333,7 @@ const PeminjamanRuangan = () => {
                           <td>
                             {dayjs(row.tanggal)
                               .locale("id")
-                              .format("dddd, DD MMMM YYYY")}
+                              .format("dddd, D MMMM YYYY")}
                           </td>
                           <td>{row.nama_peminjam}</td>
                           <td>{row.ruangan_name}</td>
@@ -307,17 +341,17 @@ const PeminjamanRuangan = () => {
                           <td>
                             {dayjs(row.tanggal_pinjam)
                               .locale("id")
-                              .format("dddd, DD MMMM YYYY")}
+                              .format("dddd, D MMMM YYYY")}
                           </td>
                           <td>
                             {row.sesi
                               ? row.sesi
                               : row.jam_mulai && row.jam_selesai
-                              ? `${row.jam_mulai.slice(
-                                  0,
-                                  5
-                                )} - ${row.jam_selesai.slice(0, 5)}`
-                              : "-"}
+                                ? `${row.jam_mulai.slice(
+                                    0,
+                                    5,
+                                  )} - ${row.jam_selesai.slice(0, 5)}`
+                                : "-"}
                           </td>
                           <td>{row.barang}</td>
                           <td>
@@ -391,14 +425,14 @@ const PeminjamanRuangan = () => {
             onExportTable={() =>
               exportPeminjamanRuanganExcel(
                 withNo,
-                `Peminjaman_Tanggal_${selectedDate.toLocaleDateString(
-                  "id-ID"
-                )}.xlsx`
+                pejabat,
+                `Peminjaman_Tanggal_${dayjs(selectedDate).format("D_MM_YYYY")}.xlsx`,
+                `DATA PEMINJAMAN RUANGAN HARI ${dayjs(selectedDate).locale("id").format("dddd, D MMMM YYYY")}`,
               )
             }
             // 🔹 EXPORT PER BULAN
             onExportMonth={() => {
-              const month = selectedDate.getMonth();
+              const month = dayjs(selectedDate).month();
               const year = dayjs(selectedDate).year();
 
               const monthData = data.filter((item) => {
@@ -410,12 +444,21 @@ const PeminjamanRuangan = () => {
 
               exportPeminjamanRuanganExcel(
                 monthData,
-                `Peminjaman_Bulan_${month + 1}_${year}.xlsx`
+                pejabat,
+                `Peminjaman_Bulan_${month + 1}_${year}.xlsx`,
+                `DATA PEMINJAMAN RUANGAN BULAN ${dayjs(selectedDate).locale("id").format("MMMM YYYY")}`,
               );
             }}
+            // 🔹 EXPORT PER TAHUN
+            onExportYear={onExportYear}
             // 🔹 EXPORT SEMUA DATA
             onExportAll={() =>
-              exportPeminjamanRuanganExcel(data, "Peminjaman_Semua_Data.xlsx")
+              exportPeminjamanRuanganExcel(
+                data,
+                pejabat,
+                "Peminjaman_Semua_Data.xlsx",
+                "DATA PEMINJAMAN RUANGAN KESELURUHAN",
+              )
             }
             showUpload
             onUpload={() => setShowPilihPeminjam(true)}

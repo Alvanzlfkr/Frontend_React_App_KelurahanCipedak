@@ -43,7 +43,9 @@ const Login = () => {
   const strengthLabel =
     strengthCount <= 2 ? "Lemah" : strengthCount <= 4 ? "Sedang" : "Kuat";
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault(); // ⛔ cegah refresh halaman
+
     if (!identifier || !password) {
       alert("❌ Email / Username dan password wajib diisi");
       return;
@@ -84,34 +86,37 @@ const Login = () => {
           <img src={logo} alt="Logo" className="icon-image" />
         </div>
         <h2 className="login-title">Login Admin</h2>
-        <input
-          type="text"
-          placeholder="Email atau Username"
-          className="login-input"
-          value={identifier}
-          onChange={(e) => setIdentifier(e.target.value)}
-        />
-        {/* Password wrapper */}
-        <div className="password-wrapper">
+        <form onSubmit={handleLogin}>
           <input
-            type={showPassword ? "text" : "password"}
+            type="text"
+            placeholder="Email atau Username"
             className="login-input"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
           />
-          {password && (
-            <span
-              className="login-toggle-eye"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-            </span>
-          )}
-        </div>
-        <button className="login-btn" onClick={handleLogin} disabled={loading}>
-          {loading ? "Loading..." : "Login"}
-        </button>
+
+          <div className="password-wrapper">
+            <input
+              type={showPassword ? "text" : "password"}
+              className="login-input"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {password && (
+              <span
+                className="login-toggle-eye"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </span>
+            )}
+          </div>
+
+          <button type="submit" className="login-btn" disabled={loading}>
+            {loading ? "Loading..." : "Login"}
+          </button>
+        </form>
         <p className="forgot-container">
           <span className="forgot-text">Lupa password?</span>
           <button

@@ -166,7 +166,7 @@ const BantuanAIModal = ({ open, onClose }) => {
         <div className="ai-modal-footer">
           <input
             className="ai-input"
-            placeholder="Contoh: Ruangan B tersedia jam berapa?"
+            placeholder="Masukkan Teks"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}

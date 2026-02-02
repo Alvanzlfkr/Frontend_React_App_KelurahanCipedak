@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { createPenanganan } from "../services/penangananService.jsx";
 import Sidebar from "../../components/layout/Sidebar/Sidebar";
 import Header from "../../components/layout/Header/Header";
@@ -7,6 +7,10 @@ import "./TambahPenanganan.css";
 
 const TambahPenanganan = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // 🔹 ambil jabatan yang sudah terisi
+  const jabatanTerisi = location.state?.jabatanTerisi || [];
 
   const handleSubmit = async (data) => {
     try {
@@ -24,9 +28,14 @@ const TambahPenanganan = () => {
       <div className="main-content">
         <Header />
         <div className="tambah-penanganan-container">
-          <h1>Tambah Penanganan</h1>
+          <h1 className="title-penanganan">Tambah Penanganan</h1>
 
-          <PenangananForm submitLabel="Simpan" onSubmit={handleSubmit} />
+          <PenangananForm
+            submitLabel="Simpan"
+            onSubmit={handleSubmit}
+            jabatanTerisi={jabatanTerisi}
+            isEdit={false}
+          />
         </div>
       </div>
     </div>

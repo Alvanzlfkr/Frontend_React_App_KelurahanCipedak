@@ -9,6 +9,7 @@
 
   width: 100%; /* ikut parent */
   height: calc(100%-20px);
+  max-height: auto;
 
   font-family: sans-serif;
   border-radius: 12px;

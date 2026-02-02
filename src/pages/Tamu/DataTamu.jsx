@@ -25,6 +25,22 @@ const DataTamu = () => {
   const filterBtnRef = useRef(null);
   const calendarRef = useRef(null);
 
+  const [pejabat, setPejabat] = useState({
+    lurah: null,
+    sekretaris: null,
+  });
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/penanganan")
+      .then((res) => res.json())
+      .then((data) => {
+        setPejabat({
+          lurah: data.find((p) => p.jabatan === "Lurah"),
+          sekretaris: data.find((p) => p.jabatan === "Sekretaris"),
+        });
+      });
+  }, []);
+
   // Toggle kalender
   const toggleCalendar = () => setShowCalendar(!showCalendar);
 
@@ -71,7 +87,7 @@ const DataTamu = () => {
     .filter(
       (tamu) =>
         new Date(tamu.tanggal).toDateString() ===
-        selectedDateTamu.toDateString()
+        selectedDateTamu.toDateString(),
     )
     .sort((a, b) => a.id - b.id); // urutkan berdasarkan id
 
@@ -114,6 +130,17 @@ const DataTamu = () => {
       console.error(error);
     }
   };
+
+  // const handleExportYear = () => {
+  //   const year = selectedDateTamu.getFullYear();
+
+  //   const yearData = dataTamu.filter((item) => {
+  //     const t = new Date(item.tanggal);
+  //     return t.getFullYear() === year;
+  //   });
+
+  //   exportToExcel(yearData, `DataTamu_Tahun_${year}.xlsx`);
+  // };
 
   // const handlePanggil = (guest) =>
   //   alert(`Memanggil ${guest.nama} untuk keperluan: ${guest.keperluan}`);
@@ -182,7 +209,7 @@ const DataTamu = () => {
               Data Tamu{" "}
               {selectedDateTamu.toLocaleDateString("id-ID", {
                 weekday: "long",
-                day: "2-digit",
+                day: "numeric",
                 month: "long",
                 year: "numeric",
               })}
@@ -218,7 +245,7 @@ const DataTamu = () => {
                           <td>
                             {new Date(row.tanggal).toLocaleDateString("id-ID", {
                               weekday: "long",
-                              day: "2-digit",
+                              day: "numeric",
                               month: "long",
                               year: "numeric",
                             })}
@@ -269,25 +296,68 @@ const DataTamu = () => {
 
           {/* Footer dengan navigasi tanggal */}
           <Footer
-            onExportTable={() =>
+            onExportTable={() => {
+              const tanggal = selectedDateTamu.toLocaleDateString("id-ID", {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              });
+
               exportToExcel(
                 filteredDataWithNo,
-                `DataTamu_${selectedDateTamu.toLocaleDateString("id-ID")}.xlsx`
-              )
-            }
+                pejabat,
+                `DataTamu_${selectedDateTamu.toLocaleDateString("id-ID")}.xlsx`,
+                `DATA TAMU HARI ${tanggal}`,
+              );
+            }}
             onExportMonth={() => {
               const month = selectedDateTamu.getMonth();
               const year = selectedDateTamu.getFullYear();
+
               const monthData = dataTamu.filter((item) => {
                 const t = new Date(item.tanggal);
                 return t.getMonth() === month && t.getFullYear() === year;
               });
+
+              const namaBulan = selectedDateTamu.toLocaleDateString("id-ID", {
+                month: "long",
+              });
+
               exportToExcel(
                 monthData,
-                `DataTamu_Bulan_${month + 1}_${year}.xlsx`
+                pejabat,
+                `DataTamu_Bulan_${month + 1}_${year}.xlsx`,
+                `DATA TAMU BULAN ${namaBulan} ${year}`,
               );
             }}
-            onExportAll={() => exportToExcel(dataTamu, "DataTamu_Semua.xlsx")}
+            onExportYear={() => {
+              const year = selectedDateTamu.getFullYear();
+
+              const yearData = dataTamu.filter((item) => {
+                return new Date(item.tanggal).getFullYear() === year;
+              });
+
+              if (!yearData.length) {
+                alert(`Tidak ada data untuk tahun ${year}`);
+                return;
+              }
+
+              exportToExcel(
+                yearData,
+                pejabat,
+                `DataTamu_Tahun_${year}.xlsx`,
+                `DATA TAMU TAHUN ${year}`,
+              );
+            }}
+            onExportAll={() =>
+              exportToExcel(
+                dataTamu,
+                pejabat,
+                "DataTamu_Semua.xlsx",
+                "DATA TAMU KESELURUHAN",
+              )
+            }
             onUpload={handleUpload}
             handlePrevDate={handlePrevDate}
             handleNextDate={handleNextDate}

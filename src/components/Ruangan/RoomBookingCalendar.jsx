@@ -32,19 +32,27 @@ const RoomBookingCalendar = ({
 
   /* ================= CALENDAR DAYS ================= */
   const calendarDays = useMemo(() => {
-    const firstDay = new Date(year, month, 1).getDay();
+    const start = new Date(year, month, 1);
+    const firstDay = start.getDay();
     const totalDays = new Date(year, month + 1, 0).getDate();
-    const prevTotal = new Date(year, month, 0).getDate();
+    const prevMonthTotal = new Date(year, month, 0).getDate();
 
-    const days = [];
+    let days = [];
     for (let i = firstDay - 1; i >= 0; i--) {
-      days.push({ day: prevTotal - i, isCurrentMonth: false });
+      days.push({ day: prevMonthTotal - i, isCurrentMonth: false });
     }
     for (let i = 1; i <= totalDays; i++) {
       days.push({ day: i, isCurrentMonth: true });
     }
-    while (days.length < 42) {
-      days.push({ day: days.length, isCurrentMonth: false });
+    const remaining = days.length % 7;
+    if (remaining !== 0) {
+      const fill = 7 - remaining;
+      for (let i = 1; i <= fill; i++) {
+        days.push({
+          day: i,
+          isCurrentMonth: false,
+        });
+      }
     }
     return days;
   }, [month, year]);
@@ -267,7 +275,6 @@ const RoomBookingCalendar = ({
           </button>
         </div>
       </div>
-
       {/* LEGEND */}
       <div className="room-calendar-legend">
         <span>
@@ -280,7 +287,6 @@ const RoomBookingCalendar = ({
           <i className="dot full"></i> Penuh
         </span>
       </div>
-
       {/* WEEKDAYS */}
       <div className="room-calendar-weekdays">
         {["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"].map(
@@ -291,90 +297,81 @@ const RoomBookingCalendar = ({
           )
         )}
       </div>
-
       {/* GRID */}
-      {[0, 1, 2, 3, 4].map((w) => (
-        <div key={w} className="room-booking-grid">
-          {calendarDays.slice(w * 7, w * 7 + 7).map((d, i) => {
-            const status = d.isCurrentMonth
-              ? dayStatusMap[d.day] || "available"
-              : "other-month";
+      <div className="room-booking-grid">
+        {calendarDays.map((d, i) => {
+          const status = d.isCurrentMonth
+            ? dayStatusMap[d.day] || "available"
+            : "other-month";
 
-            return (
-              <div
-                key={i}
-                className={`booking-cell ${status}`}
-                onClick={() => {
-                  if (!d.isCurrentMonth) return;
+          return (
+            <div
+              key={i}
+              className={`booking-cell ${status}`}
+              onClick={() => {
+                if (!d.isCurrentMonth) return;
 
-                  const details = dayBookingDetails[d.day] || [];
-                  const status = dayStatusMap[d.day] || "available";
+                const details = dayBookingDetails[d.day] || [];
+                const status = dayStatusMap[d.day] || "available";
 
-                  // ===== HEADER =====
-                  let message = `📅 ${activeRoom.nama}\n`;
-                  message += `${formatTanggalLengkapID(year, month, d.day)}\n`;
-                  message += `Status: ${status.toUpperCase()}\n\n`;
+                // ===== HEADER =====
+                let message = `📅 ${activeRoom.nama}\n`;
+                message += `${formatTanggalLengkapID(year, month, d.day)}\n`;
+                message += `Status: ${status.toUpperCase()}\n\n`;
 
-                  // ===== TERISI OLEH =====
-                  if (details.length === 0) {
-                    message += "✅ Ruangan masih KOSONG.\n\n";
+                // ===== TERISI OLEH =====
+                if (details.length === 0) {
+                  message += "✅ Ruangan masih KOSONG.\n\n";
+                } else {
+                  message += "📋 Terisi oleh:\n";
+
+                  details
+                    .sort((a, b) =>
+                      a.jam_mulai && b.jam_mulai
+                        ? a.jam_mulai.localeCompare(b.jam_mulai)
+                        : 0
+                    )
+                    .forEach((b, i) => {
+                      const waktu = b.sesi
+                        ? b.sesi
+                        : `${b.jam_mulai} - ${b.jam_selesai}`;
+                      message += `${i + 1}. ${b.nama_peminjam} (${waktu})\n`;
+                    });
+
+                  message += "\n";
+                }
+
+                // ===== INFO KETERSEDIAAN =====
+                message += "💡 Info Ketersediaan:\n";
+
+                if (status === "full") {
+                  message += "❌ Ruangan sudah PENUH.";
+                } else if (activeRoom.tipe === "KANTOR") {
+                  const hasS1 = details.some((b) => b.sesi?.includes("Sesi 1"));
+                  const hasS2 = details.some((b) => b.sesi?.includes("Sesi 2"));
+
+                  if (!hasS1) message += "✅ Sesi 1 (07:30 - 12:00) tersedia\n";
+                  if (!hasS2) message += "✅ Sesi 2 (13:00 - 16:00) tersedia\n";
+                } else {
+                  const freeSlots = getAvailableRPTRASlots(details);
+
+                  if (freeSlots.length === 0) {
+                    message += "❌ Tidak ada jam kosong.";
                   } else {
-                    message += "📋 Terisi oleh:\n";
-
-                    details
-                      .sort((a, b) =>
-                        a.jam_mulai && b.jam_mulai
-                          ? a.jam_mulai.localeCompare(b.jam_mulai)
-                          : 0
-                      )
-                      .forEach((b, i) => {
-                        const waktu = b.sesi
-                          ? b.sesi
-                          : `${b.jam_mulai} - ${b.jam_selesai}`;
-                        message += `${i + 1}. ${b.nama_peminjam} (${waktu})\n`;
-                      });
-
-                    message += "\n";
+                    freeSlots.forEach((slot, i) => {
+                      message += `🟢 ${i + 1}. ${slot}\n`;
+                    });
                   }
+                }
 
-                  // ===== INFO KETERSEDIAAN =====
-                  message += "💡 Info Ketersediaan:\n";
-
-                  if (status === "full") {
-                    message += "❌ Ruangan sudah PENUH.";
-                  } else if (activeRoom.tipe === "KANTOR") {
-                    const hasS1 = details.some((b) =>
-                      b.sesi?.includes("Sesi 1")
-                    );
-                    const hasS2 = details.some((b) =>
-                      b.sesi?.includes("Sesi 2")
-                    );
-
-                    if (!hasS1)
-                      message += "✅ Sesi 1 (07:30 - 12:00) tersedia\n";
-                    if (!hasS2)
-                      message += "✅ Sesi 2 (13:00 - 16:00) tersedia\n";
-                  } else {
-                    const freeSlots = getAvailableRPTRASlots(details);
-
-                    if (freeSlots.length === 0) {
-                      message += "❌ Tidak ada jam kosong.";
-                    } else {
-                      freeSlots.forEach((slot, i) => {
-                        message += `🟢 ${i + 1}. ${slot}\n`;
-                      });
-                    }
-                  }
-
-                  alert(message);
-                }}
-              >
-                {d.day}
-              </div>
-            );
-          })}
-        </div>
-      ))}
+                alert(message);
+              }}
+            >
+              {d.day}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

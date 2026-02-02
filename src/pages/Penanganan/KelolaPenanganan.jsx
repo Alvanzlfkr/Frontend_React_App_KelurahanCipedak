@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Eye, Pencil, Trash2 } from "lucide-react";
 import Sidebar from "../../components/layout/Sidebar/Sidebar";
 import Header from "../../components/layout/Header/Header";
 import Footer from "../../components/layout/Footer/Footer";
@@ -10,50 +10,54 @@ import "./KelolaPenanganan.css";
 const KelolaPenanganan = () => {
   const navigate = useNavigate();
   const [activeMenu, setActiveMenu] = useState("kelola-penanganan");
+  const [data, setData] = useState([]);
 
-  const [data, setData] = useState([
-    { id: 1, nama: "Bpk....", jenis: "Pernikahan" },
-    { id: 2, nama: "Ibu...", jenis: "Akta" },
-    { id: 3, nama: "Bapak...", jenis: "KTP" },
-  ]);
+  // 🔹 Ambil data dari backend
+  useEffect(() => {
+    fetch("http://localhost:5000/api/penanganan")
+      .then((res) => {
+        if (!res.ok) throw new Error("Gagal fetch data");
+        return res.json();
+      })
+      .then((result) => {
+        console.log("DATA PENANGANAN:", result); // 🔍 cek di console
+        setData(result);
+      })
+      .catch((err) => {
+        console.error("FETCH ERROR:", err);
+      });
+  }, []);
+
+  // 🔹 Ambil jabatan yang sudah terisi
+  const jabatanTerisi = data.map((item) => item.jabatan);
+
+  const semuaJabatanTerisi =
+    jabatanTerisi.includes("Lurah") && jabatanTerisi.includes("Sekretaris");
 
   const handleEdit = (id) => {
-    console.log("Edit ID:", id);
-    // TODO: buka modal atau navigasi
+    navigate(`/kelola-penanganan/edit/${id}`);
   };
 
-  const handleDeletePenanganan = (id) => {
-    if (window.confirm("Yakin ingin menghapus data?")) {
-      setData(data.filter((item) => item.id !== id));
-      alert("Data berhasil dihapus!");
-    }
-  };
+  // const handleDeletePenanganan = async (id) => {
+  //   if (!window.confirm("Yakin ingin menghapus data?")) return;
 
-  // Handlers
+  //   try {
+  //     await fetch(`http://localhost:5000/penanganan/${id}`, {
+  //       method: "DELETE",
+  //     });
+
+  //     setData(data.filter((item) => item.id !== id));
+  //     alert("Data berhasil dihapus!");
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert("Gagal menghapus data");
+  //   }
+  // };
+
   const handleTambahData = () => {
-    navigate("/kelola-penanganan/tambah");
-  };
-
-  const handleExport = () => {
-    console.log("Export data...");
-    // TODO: Implementasi export ke Excel/PDF
-    alert("Mengekspor data...");
-  };
-
-  const handleUpload = () => {
-    console.log("Upload data...");
-    // TODO: Implementasi upload file
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".xlsx,.xls,.csv";
-    input.onchange = (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        console.log("File selected:", file.name);
-        alert(`File ${file.name} dipilih untuk diupload`);
-      }
-    };
-    input.click();
+    navigate("/kelola-penanganan/tambah", {
+      state: { jabatanTerisi },
+    });
   };
 
   return (
@@ -63,65 +67,85 @@ const KelolaPenanganan = () => {
       <div className="main-content">
         <Header />
 
-        {/* Title */}
         <div className="kelola-penanganan-top">
           <h1 className="kelola-penanganan-title">Kelola Penanganan</h1>
         </div>
 
-        {/* Container */}
         <div className="kelola-penanganan-container">
-          {/* Tambah Button */}
+          {/* 🔹 TOMBOL TAMBAH (HILANG JIKA SUDAH PENUH) */}
           <div className="tambah-button-wrapper">
-            <TambahDataButton onClick={handleTambahData} />
+            {!semuaJabatanTerisi && (
+              <TambahDataButton onClick={handleTambahData} />
+            )}
           </div>
-          {/* Table */}
+
+          {/* 🔹 INFO JIKA SUDAH PENUH */}
+          {/* {semuaJabatanTerisi && (
+            <p
+              style={{
+                marginTop: "10px",
+                color: "#991b1b",
+                fontSize: "14px",
+              }}
+            >
+              Jabatan Lurah dan Sekretaris sudah terisi. Silakan edit data yang
+              ada.
+            </p>
+          )} */}
+
           <div className="table-wrapper">
             <table className="penanganan-table">
               <thead>
                 <tr>
-                  <th>Nama Penanganan</th>
-                  <th>Jenis Penanganan</th>
+                  <th>Nama</th>
+                  <th>Jabatan</th>
+                  <th>NIP</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
 
               <tbody>
-                {data.map((row) => (
-                  <tr key={row.id}>
-                    <td>{row.nama}</td>
-
-                    <td>{row.jenis}</td>
-
-                    <td>
-                      <div className="table-actions">
-                        <button
-                          className="btn-edit"
-                          onClick={() => handleEdit(row.id)}
-                        >
-                          Edit
-                        </button>
-
-                        <button
-                          className="btn-delete"
-                          onClick={() => handleDeletePenanganan(row.id)}
-                        >
-                          Delete
-                        </button>
-                      </div>
+                {data.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan="4"
+                      style={{
+                        textAlign: "center",
+                        padding: "20px",
+                        color: "#6b7280",
+                      }}
+                    >
+                      Tidak ada data
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  data.map((row) => (
+                    <tr key={row.id}>
+                      <td>{row.nama}</td>
+                      <td>{row.jabatan}</td>
+                      <td>{row.nip}</td>
+                      <td>
+                        <div className="table-actions">
+                          <button
+                            className="btn-edit"
+                            onClick={() => handleEdit(row.id)}
+                          >
+                            <Pencil size={14} />
+                          </button>
+                          {/* <button
+                            className="btn-delete"
+                            onClick={() => handleDeletePenanganan(row.id)}
+                          >
+                            Delete
+                          </button> */}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
-
-          {/* Footer */}
-          <Footer
-            onExport={handleExport}
-            onUpload={handleUpload}
-            onPreviousPage={() => console.log("Previous Page")}
-            onNextPage={() => console.log("Next Page")}
-          />
         </div>
       </div>
     </div>

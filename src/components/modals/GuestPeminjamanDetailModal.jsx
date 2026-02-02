@@ -102,6 +102,23 @@ const GuestPeminjamanDetailModal = ({ guest, onClose }) => {
               <div className="modal-value">{guest.barang}</div>
             </div>
             <div className="modal-field">
+              <div className="modal-label">Tanggal Kembali Barang</div>
+              <div className="modal-colon">:</div>
+              <div className="modal-value">
+                {guest.tanggal_kembali_barang
+                  ? new Date(guest.tanggal_kembali_barang).toLocaleDateString(
+                      "id-ID",
+                      {
+                        weekday: "long",
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                      }
+                    )
+                  : "-"}
+              </div>
+            </div>
+            <div className="modal-field">
               <div className="modal-label">Keperluan</div>
               <div className="modal-colon">:</div>
               <div className="modal-value">{guest.keperluan}</div>

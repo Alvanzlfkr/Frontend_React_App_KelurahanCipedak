@@ -1,6 +1,8 @@
 import jsPDF from "jspdf";
 
-const generateSuratPeminjamanPDF = (data) => {
+const generateSuratPeminjamanPDF = (data, pejabat) => {
+  const lurah = pejabat?.lurah;
+  const sekretaris = pejabat?.sekretaris;
   const getHariTanggal = (tanggal) => {
     if (!tanggal) return "";
 
@@ -16,6 +18,7 @@ const generateSuratPeminjamanPDF = (data) => {
 
     const d = new Date(tanggal); // tanggal sekarang sudah ISO / Date
     const hari = hariMap[d.getDay()];
+    const tahunSekarang = new Date().getFullYear();
 
     const tgl = d.toLocaleDateString("id-ID", {
       day: "2-digit",
@@ -30,6 +33,33 @@ const generateSuratPeminjamanPDF = (data) => {
   const doc = new jsPDF("p", "mm", [210, 330]);
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
+  const smartTruncateNameWithTitle = (fullName) => {
+    if (!fullName) return "";
+
+    let parts = fullName.split(" ");
+
+    const frontTitles = ["DR.", "Dr.", "Ir.", "Prof.", "H.", "Hj."];
+
+    // ambil semua gelar depan
+    let front = [];
+    while (parts.length && frontTitles.includes(parts[0])) {
+      front.push(parts.shift());
+    }
+    const frontStr = front.join(" ");
+
+    // ambil gelar belakang (kata terakhir yang ada titik)
+    let backTitles = [];
+    while (parts.length && parts[parts.length - 1].includes(".")) {
+      backTitles.unshift(parts.pop());
+    }
+    const backStr = backTitles.join(", "); // pisahkan koma jika lebih dari 1
+
+    // nama inti: sisa parts
+    const coreStr = parts.join(" "); // ambil seluruh kata tengah dan nama depan
+
+    // gabungkan semuanya
+    return [frontStr, coreStr, backStr].filter(Boolean).join(" ").trim();
+  };
 
   const marginX = 20;
   const marginTop = 20;
@@ -80,7 +110,9 @@ const generateSuratPeminjamanPDF = (data) => {
   y += 6;
   doc.text("KELURAHAN CIPEDAK", pageWidth / 2, y, { align: "center" });
   y += 6;
-  doc.text("TAHUN 2025", pageWidth / 2, y, { align: "center" });
+  doc.text(`TAHUN ${new Date().getFullYear()}`, pageWidth / 2, y, {
+    align: "center",
+  });
 
   y += 4;
   doc.line(marginX, y, pageWidth - marginX, y);
@@ -135,7 +167,7 @@ const generateSuratPeminjamanPDF = (data) => {
   doc.text(
     "Adapun alat / perlengkapan yang dibutuhkan sebagai berikut :",
     marginX,
-    y
+    y,
   );
 
   const items = data.alat?.length ? data.alat.slice(0, 5) : [""]; // batasi 5 item
@@ -157,7 +189,7 @@ const generateSuratPeminjamanPDF = (data) => {
   doc.text(
     "Peminjaman alat / tempat akan dikembalikan pada tanggal",
     marginX,
-    y
+    y,
   );
   doc.text(":", 120, y);
   doc.text(data.tanggal_kembali || "", 125, y);
@@ -168,7 +200,7 @@ const generateSuratPeminjamanPDF = (data) => {
     "Demikian surat peminjaman ini kami sampaikan atas perhatian dan kerjasamanya kami ucapkan terima kasih.",
     marginX,
     y,
-    { maxWidth: pageWidth - marginX * 2 }
+    { maxWidth: pageWidth - marginX * 2 },
   );
 
   // ================= TTD PEMOHON =================
@@ -188,12 +220,20 @@ const generateSuratPeminjamanPDF = (data) => {
     year: "numeric",
   });
 
+  const tanggalSurat = new Date();
+  const tanggalSuratFormat = tanggalSurat.toLocaleDateString("id-ID", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+
   // Hitung posisi tengah untuk tanggal
   const xTanggal =
     ttdAreaX +
     ttdAreaWidth / 2 -
-    doc.getTextWidth(`Jakarta, ${tanggalFormat}`) / 2;
-  doc.text(`Jakarta, ${tanggalFormat}`, xTanggal, y);
+    doc.getTextWidth(`Jakarta, ${tanggalSuratFormat}`) / 2;
+
+  doc.text(`Jakarta, ${tanggalSuratFormat}`, xTanggal, y);
 
   y += 6;
 
@@ -219,17 +259,30 @@ const generateSuratPeminjamanPDF = (data) => {
   const tandaTanganY = baseY + 30;
   const tandaTanganX = marginX; // posisi kiri garis tanda tangan
 
-  doc.text(
-    "(.......................................)",
-    tandaTanganX,
-    tandaTanganY
-  );
+  const lurahNamaText = lurah
+    ? `${smartTruncateNameWithTitle(lurah.nama, 25)}`
+    : "(.......................................)";
+
+  const lurahNipText = lurah
+    ? `NIP. ${lurah.nip}`
+    : "NIP. .................................";
+
+  // titik tengah berdasarkan NIP (karena NIP sudah PAS)
+  const centerX = tandaTanganX + doc.getTextWidth(lurahNipText) / 2;
+
+  // posisi X nama disamakan ke tengah NIP
+  const lurahNamaX = centerX - doc.getTextWidth(lurahNamaText) / 2;
+
+  doc.text(lurahNamaText, lurahNamaX, tandaTanganY);
 
   // NIP di bawah tanda tangan, kiri
-  const nipText = "NIP. .................................";
   const nipX = tandaTanganX; // kiri garis tanda tangan
   const nipY = tandaTanganY + 8; // jarak dari garis tanda tangan
-  doc.text(nipText, nipX, nipY);
+  doc.text(
+    lurah ? `NIP. ${lurah.nip}` : "NIP. .................................",
+    nipX,
+    nipY,
+  );
 
   // ================= KOTAK PEJABAT =================
   const boxY = baseY - 6;
@@ -242,8 +295,29 @@ const generateSuratPeminjamanPDF = (data) => {
   doc.text("Plt. Sekretaris", boxX + 25, boxY + 5);
   doc.text("Kelurahan Cipedak", boxX + 20, boxY + 11);
 
-  doc.text("(.........................................)", boxX + 15, boxY + 36);
-  doc.text("NIP. ....................................", boxX + 14, boxY + 42);
+  const sekNamaText = sekretaris
+    ? `${smartTruncateNameWithTitle(sekretaris.nama, 25)}`
+    : "(.........................................)";
+
+  const sekNipText = sekretaris
+    ? `NIP. ${sekretaris.nip}`
+    : "NIP. ....................................";
+
+  // titik tengah berdasarkan NIP
+  const sekCenterX = boxX + 14 + doc.getTextWidth(sekNipText) / 2;
+
+  // geser nama ke tengah NIP
+  const sekNamaX = sekCenterX - doc.getTextWidth(sekNamaText) / 2;
+
+  doc.text(sekNamaText, sekNamaX, boxY + 36);
+
+  doc.text(
+    sekretaris
+      ? `NIP. ${sekretaris.nip}`
+      : "NIP. ....................................",
+    boxX + 14,
+    boxY + 42,
+  );
 
   // Setuju / Tidak
   doc.rect(rightBoxX, boxY, 50, boxHeight);
@@ -280,7 +354,7 @@ const generateSuratPeminjamanPDF = (data) => {
     "*Kerusakan atau kehilangan alat-alat, saya sanggup mengganti dengan yang sama.",
     valueX,
     y,
-    { maxWidth }
+    { maxWidth },
   );
 
   y += 6;
@@ -290,7 +364,7 @@ const generateSuratPeminjamanPDF = (data) => {
     "*Untuk peminjaman tabung oksigen, pengembalian wajib mengisi ulang.",
     valueX,
     y,
-    { maxWidth }
+    { maxWidth },
   );
 
   y += 6;

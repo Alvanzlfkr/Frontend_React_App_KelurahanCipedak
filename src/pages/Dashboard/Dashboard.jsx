@@ -56,10 +56,10 @@ const Dashboard = () => {
           return {
             label: day,
             tamu: tamuData.filter(
-              (t) => new Date(t.tanggal).toDateString() === dateStr
+              (t) => new Date(t.tanggal).toDateString() === dateStr,
             ).length,
             pinjam: pinjamData.filter(
-              (p) => new Date(p.tanggal).toDateString() === dateStr
+              (p) => new Date(p.tanggal).toDateString() === dateStr,
             ).length,
           };
         });

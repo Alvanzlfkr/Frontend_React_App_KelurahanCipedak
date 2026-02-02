@@ -1,92 +1,205 @@
 import { useState, useEffect } from "react";
-import Sidebar from "../layout/Sidebar/Sidebar";
-import Header from "../layout/Header/Header";
-import axios from "axios";
+import "./PenangananForm.css";
 
-const PenangananForm = ({ initialData, submitLabel }) => {
-  const [activeMenu, setActiveMenu] = useState("data-penanganan");
+const ALL_JABATAN = ["Lurah", "Sekretaris"];
 
+const PenangananForm = ({
+  initialData,
+  onSubmit,
+  submitLabel,
+  jabatanTerisi = [],
+  isEdit = false,
+}) => {
   const [formData, setFormData] = useState({
-    keterangan: "",
-    jenis: "",
+    nama: "",
+    nip: "",
+    jabatan: "",
   });
 
   const [errors, setErrors] = useState({});
 
+  /* ===============================
+     ISI DATA SAAT MODE EDIT
+     =============================== */
   useEffect(() => {
-    if (initialData) setFormData(initialData);
+    if (!initialData) return;
+
+    setFormData({
+      nama: initialData.nama ?? "",
+      nip: initialData.nip ?? "",
+      jabatan: initialData.jabatan ?? "",
+    });
   }, [initialData]);
 
+  /* ===============================
+     AUTO SET JABATAN (MODE TAMBAH)
+     =============================== */
+  useEffect(() => {
+    if (isEdit) return;
+
+    const sisaJabatan = ALL_JABATAN.filter((j) => !jabatanTerisi.includes(j));
+
+    if (sisaJabatan.length === 1 && formData.jabatan !== sisaJabatan[0]) {
+      setFormData((prev) => ({
+        ...prev,
+        jabatan: sisaJabatan[0],
+      }));
+    }
+  }, [jabatanTerisi, isEdit]); // ⚠️ aman, tidak infinite loop
+
+  /* ===============================
+     OPSI JABATAN DI SELECT
+     =============================== */
+  const availableJabatan = isEdit
+    ? [formData.jabatan]
+    : ALL_JABATAN.filter((j) => !jabatanTerisi.includes(j));
+
+  /* ===============================
+     VALIDASI FORM
+     =============================== */
+  /* ===============================
+   VALIDASI FORM
+=============================== */
   const validate = () => {
     const err = {};
-    if (!formData.keterangan.trim()) err.keterangan = "Keterangan wajib diisi";
-    if (!formData.jenis.trim()) err.jenis = "Jenis wajib diisi";
+
+    // Nama wajib diisi
+    if (!formData.nama.trim()) {
+      err.nama = "Nama wajib diisi";
+    }
+    // Nama maksimal 26 karakter
+    else if (formData.nama.trim().length > 26) {
+      err.nama = "Nama tidak boleh lebih dari 26 karakter";
+    }
+
+    // Validasi NIP
+    if (!formData.nip.trim()) {
+      err.nip = "NIP wajib diisi";
+    } else if (!/^\d{5,25}$/.test(formData.nip)) {
+      err.nip = "NIP harus 5–25 digit angka";
+    }
+
+    // Validasi jabatan
+    if (!formData.jabatan) {
+      err.jabatan = "Jabatan wajib dipilih";
+    }
+
     setErrors(err);
     return Object.keys(err).length === 0;
   };
 
+  /* ===============================
+     HANDLER
+     =============================== */
+  /* ===============================
+   HANDLER
+   =============================== */
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" });
+    const { name, value } = e.target;
+
+    // Batasi nama maksimal 26 karakter
+    const newValue = name === "nama" ? value.slice(0, 26) : value;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: newValue,
+    }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleCancel = () => {
+    navigate("/kelola-penanganan");
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
-
-    if (initialData) {
-      await axios.put(
-        `http://localhost:5000/api/penanganan/${initialData.id}`,
-        formData
-      );
-    } else {
-      await axios.post("http://localhost:5000/api/penanganan", formData);
-    }
-
-    alert("Data berhasil disimpan");
+    onSubmit(formData);
   };
 
+  /* ===============================
+     RENDER
+     =============================== */
   return (
-    <div className="layout-container">
-      <Sidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
-      <div className="main-content">
-        <Header />
+    <form onSubmit={handleSubmit} className="form-card">
+      {/* NAMA */}
+      <div className="form-group">
+        <label>Nama</label>
+        <input
+          name="nama"
+          value={formData.nama}
+          onChange={handleChange}
+          placeholder="Nama lengkap"
+        />
+        {errors.nama && <small className="error">{errors.nama}</small>}
 
-        <div className="form-card">
-          <form onSubmit={handleSubmit}>
-            {/*Nama*/}
-            <div className="form-group">
-              <label htmlFor=""></label>
-            </div>
-            {/* Keterangan */}
-            <div className="form-group">
-              <label>Keterangan</label>
-              <input
-                name="keterangan"
-                value={formData.keterangan}
-                onChange={handleChange}
-                placeholder="Contoh: Petugas Loket"
-              />
-              {errors.keterangan && <small>{errors.keterangan}</small>}
-            </div>
-
-            {/* Jenis */}
-            <div className="form-group">
-              <label>Jenis Penanganan</label>
-              <input
-                name="jenis"
-                value={formData.jenis}
-                onChange={handleChange}
-                placeholder="Contoh: Verifikasi Dokumen"
-              />
-              {errors.jenis && <small>{errors.jenis}</small>}
-            </div>
-
-            <button type="submit">{submitLabel}</button>
-          </form>
-        </div>
+        {/* info tambahan */}
       </div>
-    </div>
+
+      {/* NIP */}
+      <div className="form-group">
+        <label>NIP</label>
+        <input
+          name="nip"
+          value={formData.nip}
+          onChange={(e) => {
+            const cleaned = e.target.value.replace(/\D/g, "");
+
+            setFormData((prev) => ({
+              ...prev,
+              nip: cleaned,
+            }));
+
+            setErrors((prev) => ({
+              ...prev,
+              nip: "",
+            }));
+          }}
+          inputMode="numeric"
+          placeholder="Masukkan NIP"
+        />
+        {errors.nip && <small className="error">{errors.nip}</small>}
+      </div>
+
+      {/* JABATAN */}
+      <div className="form-group">
+        <label>Jabatan</label>
+        <select
+          name="jabatan"
+          value={formData.jabatan}
+          onChange={handleChange}
+          disabled={isEdit}
+        >
+          <option value="">-- Pilih Jabatan --</option>
+          {availableJabatan.map((j) => (
+            <option key={j} value={j}>
+              {j}
+            </option>
+          ))}
+        </select>
+        {errors.jabatan && <small className="error">{errors.jabatan}</small>}
+      </div>
+
+      {/* INFO FORMAT */}
+      <div className="form-info">
+        <small>Format Penamaan: Persingkat nama jika terlalu panjang.</small>
+        <small>Contoh: Prof. Rahmadi Amirul Mukminin S.KOM M.KOM</small>
+        <small>Menjadi: Prof. Rahmadi A M.KOM</small>
+      </div>
+
+      <div className="form-actions">
+        <button type="submit" className="btn-submit">
+          {submitLabel}
+        </button>
+        <button type="button" onClick={handleCancel} className="btn-cancel">
+          Batal
+        </button>
+      </div>
+    </form>
   );
 };
 

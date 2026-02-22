@@ -5,6 +5,8 @@ const logout = async () => {
     adminId: admin.id,
   });
 
-  localStorage.removeItem("admin");
+  ldocument.addEventListener("visibilitychange", checkIdle);
+  window.addEventListener("focus", checkIdle);
+  localStorage.clear();
   navigate("/login");
 };

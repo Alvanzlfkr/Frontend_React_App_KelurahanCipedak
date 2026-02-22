@@ -1,0 +1,141 @@
+body {
+  background: #f3f6fb;
+}
+
+.scan-qr-wa-top {
+  display: flex;
+  justify-content: space-between; /* semua elemen di kiri */
+  align-items: center;
+  margin-left: 370px; /* sesuaikan sidebar */
+  margin-right: 20px;
+  margin-top: 100px;
+  margin-bottom: 10px;
+}
+
+.scan-qr-wa-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2937;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.scan-qr-wa-container {
+  background: #ffffff;
+  margin-left: 700px;
+  margin-right: 400px;
+  margin-top: 100px;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-logout-scanqr-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-logout-scanqr {
+  padding: 10px 20px;
+  background: rgba(64, 115, 58, 1);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-logout-scanqr:hover {
+  background: #047857;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(5, 150, 105, 0.2);
+}
+
+.wa-connected-card {
+  text-align: center;
+  max-width: 420px;
+}
+
+.wa-status-icon {
+  width: 70px;
+  height: 70px;
+  background: #10b981;
+  color: white;
+  font-size: 36px;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 20px auto;
+  box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+}
+
+.wa-status-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #111827;
+  margin-bottom: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.wa-device-name {
+  font-size: 14px;
+  color: #4b5563;
+  margin-bottom: 8px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.wa-status-desc {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1350px) {
+  .scan-qr-wa-container {
+    margin-left: 700px;
+    margin-right: 250px;
+  }
+}
+@media (max-width: 1170px) {
+  .scan-qr-wa-container {
+    margin-left: 500px;
+    margin-right: 100px;
+  }
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .scan-qr-wa-top {
+    margin-left: 20px;
+  }
+  .scan-qr-wa-container {
+    margin-left: 300px;
+    margin-right: 250px;
+  }
+
+  .scan-qr-wa-title {
+    font-size: 26px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .scan-qr-wa-container {
+    margin: 100px;
+  }
+
+  .wa-status-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
+  }
+}

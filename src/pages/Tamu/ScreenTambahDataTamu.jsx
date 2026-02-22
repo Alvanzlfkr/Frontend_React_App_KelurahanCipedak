@@ -98,10 +98,10 @@ const TambahDataTamu = () => {
   };
 
   return (
-    <div className="layout-container">
+    <div className="layout-container-data-tamu">
       <Sidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
 
-      <div className="main-content">
+      <div className="main-content-data-tamu">
         <Header />
 
         <div className="tambah-data-container">

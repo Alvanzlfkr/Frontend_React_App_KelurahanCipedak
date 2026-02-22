@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { getModeParams } from "../../config/appConfig";
 import Sidebar from "../../components/layout/Sidebar/Sidebar";
 import Header from "../../components/layout/Header/Header";
 import "./TambahDataPeminjam.css";
@@ -63,16 +64,6 @@ const EditDataPeminjam = () => {
 
     // ⛔ disable 12:01 – 13:29
     return m > 720 && m < 810;
-  };
-
-  const konflikMap = {
-    "Sesi 1 (07:30 - 12:00)": ["Sesi 1 (07:30 - 12:00)", "Sesi 1 & 2 (Full)"],
-    "Sesi 2 (13:00 - 16:00)": ["Sesi 2 (13:00 - 16:00)", "Sesi 1 & 2 (Full)"],
-    "Sesi 1 & 2 (Full)": [
-      "Sesi 1 (07:30 - 12:00)",
-      "Sesi 2 (13:00 - 16:00)",
-      "Sesi 1 & 2 (Full)",
-    ],
   };
 
   // =====================================
@@ -155,12 +146,14 @@ const EditDataPeminjam = () => {
 
   // ===================== FETCH RUANGAN =====================
   useEffect(() => {
-    fetch("http://localhost:5000/api/ruangan")
-      .then((res) => res.json())
-      .then(setListRuangan)
-      .catch(console.error);
-  }, []);
+    const params = new URLSearchParams(getModeParams()).toString();
+    const url = `http://localhost:5000/api/ruangan?${params}`;
 
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => setListRuangan(data))
+      .catch((err) => console.error("Gagal ambil ruangan:", err));
+  }, []);
   const formattedTanggal = formData.tanggal
     ? dayjs(formData.tanggal).format("dddd, DD MMMM YYYY")
     : "";
@@ -241,42 +234,54 @@ const EditDataPeminjam = () => {
           return;
         }
 
-        const sesiTerisi = data.map((d) => d.sesi).filter(Boolean);
+        const disabled = {
+          sesi1: false,
+          sesi2: false,
+          full: false,
+        };
 
-        const sesiKonflik = new Set();
+        data.forEach((d) => {
+          if (d.id === parseInt(id)) return; // skip data sendiri
 
-        sesiTerisi.forEach((s) => {
-          // 🔥 JIKA DATA LAMA ADALAH FULL, JANGAN KUNCI SESI 1 & 2
-          if (
-            peminjamData?.sesi === "Sesi 1 & 2 (Full)" &&
-            s === "Sesi 1 & 2 (Full)"
-          ) {
-            return;
+          if (d.sesi === "Sesi 1 (07:30 - 12:00)") {
+            disabled.sesi1 = true;
           }
 
-          const konflik = konflikMap[s] || [s];
-          konflik.forEach((k) => sesiKonflik.add(k));
+          if (d.sesi === "Sesi 2 (13:00 - 16:00)") {
+            disabled.sesi2 = true;
+          }
+
+          if (d.sesi === "Sesi 1 & 2 (Full)") {
+            disabled.sesi1 = true;
+            disabled.sesi2 = true;
+            disabled.full = true;
+          }
         });
 
-        // 🔥 INI KUNCI FIX-NYA
-        // hapus sesi milik data yang sedang diedit
-        if (formData.sesi) {
-          sesiKonflik.delete(formData.sesi);
+        // FULL mati hanya kalau dua sesi terpakai
+        if (disabled.sesi1 || disabled.sesi2) {
+          disabled.full = true;
         }
 
-        setDisabledSesi([...sesiKonflik]);
+        const result = [];
+        if (disabled.sesi1) result.push("Sesi 1 (07:30 - 12:00)");
+        if (disabled.sesi2) result.push("Sesi 2 (13:00 - 16:00)");
+        if (disabled.full) result.push("Sesi 1 & 2 (Full)");
 
-        setBookedTimes(
-          data
-            .filter((d) => d.jam_mulai && d.jam_selesai)
-            .map((d) => ({
-              start: d.jam_mulai.slice(0, 5),
-              end: d.jam_selesai.slice(0, 5),
-            })),
-        );
+        setDisabledSesi(result);
+
+        // jam booking RPTRA
+        const times = data
+          .filter((d) => d.jam_mulai && d.jam_selesai && d.id !== parseInt(id))
+          .map((d) => ({
+            start: d.jam_mulai.substring(0, 5),
+            end: d.jam_selesai.substring(0, 5),
+          }));
+
+        setBookedTimes(times);
       })
       .catch(console.error);
-  }, [formData.tanggalPinjam, formData.ruangan, formData.sesi, id]);
+  }, [formData.tanggalPinjam, formData.ruangan, id]);
 
   // ===================== TIME PICKER HANDLER (SAMA DENGAN TAMBAH DATA) =====================
   const handleTimeChange = (newValue, type) => {
@@ -476,10 +481,10 @@ const EditDataPeminjam = () => {
   };
 
   return (
-    <div className="layout-container">
+    <div className="layout-container-data-peminjam">
       <Sidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
 
-      <div className="main-content">
+      <div className="main-content-data-peminjam">
         <Header />
 
         <div className="tambah-data-container">
@@ -702,13 +707,13 @@ const EditDataPeminjam = () => {
                           value={s}
                           disabled={disabledSesi.includes(s)}
                         >
-                          {s}{" "}
-                          {disabledSesi.includes(s) ? "(Sudah dipesan)" : ""}
+                          {s}
+                          {disabledSesi.includes(s) ? " (Sudah dipesan)" : ""}
                         </option>
                       ))}
                     </select>
                   )}
-                  {errors.sesi && (
+                  {!isSelectedRoomRPTRA() && submitted && errors.sesi && (
                     <small className="error-text">{errors.sesi}</small>
                   )}
                 </div>

@@ -17,6 +17,8 @@ import DataTamu from "./pages/Tamu/DataTamu";
 import TambahDataTamu from "./pages/Tamu/ScreenTambahDataTamu";
 import EditDataTamu from "./pages/Tamu/ScreenEditDataTamu";
 
+import ScanQRWA from "./pages/WhatsApp/scanqrwa";
+
 import PeminjamanRuangan from "./pages/Ruangan/PeminjamanRuangan";
 import TambahDataPeminjam from "./components/Ruangan/TambahDataPeminjam";
 import EditDataPeminjam from "./components/Ruangan/EditDataPeminjam";
@@ -44,7 +46,7 @@ function App() {
       try {
         // cek admin
         const adminRes = await axios.get(
-          "http://localhost:5000/api/admin/check"
+          "http://localhost:5000/api/admin/check",
         );
         setAdminExists(adminRes.data.exists);
 
@@ -96,12 +98,12 @@ function App() {
     };
 
     ["click", "keydown", "mousemove"].forEach((e) =>
-      window.addEventListener(e, updateActivity)
+      window.addEventListener(e, updateActivity),
     );
 
     return () => {
       ["click", "keydown", "mousemove"].forEach((e) =>
-        window.removeEventListener(e, updateActivity)
+        window.removeEventListener(e, updateActivity),
       );
     };
   }, []);
@@ -262,6 +264,14 @@ function App() {
           element={
             <ProtectedRoute>
               <EditPenanganan />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/scan-qr-code-wa"
+          element={
+            <ProtectedRoute>
+              <ScanQRWA />
             </ProtectedRoute>
           }
         />

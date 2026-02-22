@@ -23,9 +23,9 @@ const TambahPenanganan = () => {
   };
 
   return (
-    <div className="layout-container">
+    <div className="layout-container-penanganan">
       <Sidebar activeMenu="kelola-penanganan" />
-      <div className="main-content">
+      <div className="main-content-penanganan">
         <Header />
         <div className="tambah-penanganan-container">
           <h1 className="title-penanganan">Tambah Penanganan</h1>

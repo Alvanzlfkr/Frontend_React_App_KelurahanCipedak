@@ -6,6 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:kelurahan": "vite build --mode kelurahan",
+    "build:rptra-cipedak": "vite build --mode rptra_cipedak",
+    "build:rptra-cendekia": "vite build --mode rptra_cendekia",
+    "build:rptra-aselih": "vite build --mode rptra_cinta_aselih",
     "lint": "eslint .",
     "preview": "vite preview"
   },

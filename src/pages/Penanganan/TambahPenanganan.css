@@ -1,3 +1,16 @@
+/* ============================================================================
+   TAMBAH PENANGANAN PAGE STYLES
+   ============================================================================ */
+
+.layout-container-penanganan {
+  display: flex;
+}
+.main-content-penanganan {
+  margin-left: 200px; /* sesuai lebar sidebar */
+  width: 100%;
+  padding: 40px;
+}
+
 .tambah-penanganan-container {
   width: 1000px;
   margin-left: 400px;

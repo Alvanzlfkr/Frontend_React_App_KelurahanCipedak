@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { APP_MODE } from "../../config/appConfig";
 import { fetchBookings, fetchRooms } from "../../utils/fetch/fetch";
 import Sidebar from "../../components/layout/Sidebar/Sidebar";
 import Header from "../../components/layout/Header/Header";
@@ -11,6 +12,13 @@ const KelolaRuangan = () => {
   const [activeMenu, setActiveMenu] = useState("kelola-ruangan");
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const RUANGAN_BY_MODE = {
+    kelurahan: { tipe: "KANTOR" },
+    rptra_cipedak: { tipe: "RPTRA", kode: "CIPEDAK" },
+    rptra_cendekia: { tipe: "RPTRA", kode: "CENDEKIA" },
+    rptra_cinta_aselih: { tipe: "RPTRA", kode: "ASELIH" },
+  };
 
   const [rooms, setRooms] = useState([]);
   const [bookings, setBookings] = useState([]);
@@ -105,13 +113,13 @@ const KelolaRuangan = () => {
         if (room.tipe === "KANTOR") {
           // --- LOGIKA KANTOR (SESI) ---
           const hasFullSession = dailyBookings.some(
-            (b) => b.sesi && b.sesi.includes("Full")
+            (b) => b.sesi && b.sesi.includes("Full"),
           );
           const hasSesi1 = dailyBookings.some(
-            (b) => b.sesi && b.sesi.includes("Sesi 1")
+            (b) => b.sesi && b.sesi.includes("Sesi 1"),
           );
           const hasSesi2 = dailyBookings.some(
-            (b) => b.sesi && b.sesi.includes("Sesi 2")
+            (b) => b.sesi && b.sesi.includes("Sesi 2"),
           );
 
           if (hasFullSession || (hasSesi1 && hasSesi2)) {
@@ -333,67 +341,78 @@ const KelolaRuangan = () => {
           {loading ? (
             <p>Loading rooms...</p>
           ) : (
-            processedRuanganData.map((ruangan) => (
-              <div key={ruangan.id} className="ruangan-card">
-                <div className="ruangan-card-header">
-                  <h3 className="ruangan-name">{ruangan.nama}</h3>
-                  <div className="ruangan-legend">
-                    <div className="legend-item">
-                      <div className="legend-dot available"></div>
-                      <span>Kosong</span>
-                    </div>
-                    <div className="legend-item">
-                      <div className="legend-dot partial"></div>
-                      <span>Terisi Sebagian</span>
-                    </div>
-                    <div className="legend-item">
-                      <div className="legend-dot full"></div>
-                      <span>Penuh</span>
+            processedRuanganData
+              .filter((ruangan) => {
+                const config = RUANGAN_BY_MODE[APP_MODE];
+                if (!config) return true;
+
+                if (config.tipe && ruangan.tipe !== config.tipe) return false;
+                if (config.kode && ruangan.kode !== config.kode) return false;
+
+                return true;
+              })
+              .map((ruangan) => (
+                <div key={ruangan.id} className="ruangan-card">
+                  <div className="ruangan-card-header">
+                    <h3 className="ruangan-name">{ruangan.nama}</h3>
+                    <div className="ruangan-legend">
+                      <div className="legend-item">
+                        <div className="legend-dot available"></div>
+                        <span>Kosong</span>
+                      </div>
+                      <div className="legend-item">
+                        <div className="legend-dot partial"></div>
+                        <span>Terisi Sebagian</span>
+                      </div>
+                      <div className="legend-item">
+                        <div className="legend-dot full"></div>
+                        <span>Penuh</span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="ruangan-calendar">
-                  <div className="calendar-week">
-                    {[
-                      "Minggu",
-                      "Senin",
-                      "Selasa",
-                      "Rabu",
-                      "Kamis",
-                      "Jumat",
-                      "Sabtu",
-                    ].map((d, i) => (
-                      <div key={i} className="calendar-header-cell">
-                        {d}
+                  <div className="ruangan-calendar">
+                    <div className="calendar-week">
+                      {[
+                        "Minggu",
+                        "Senin",
+                        "Selasa",
+                        "Rabu",
+                        "Kamis",
+                        "Jumat",
+                        "Sabtu",
+                      ].map((d, i) => (
+                        <div key={i} className="calendar-header-cell">
+                          {d}
+                        </div>
+                      ))}
+                    </div>
+
+                    {[0, 1, 2, 3, 4, 5].map((week) => (
+                      <div key={week} className="calendar-week">
+                        {calendarDays
+                          .slice(week * 7, week * 7 + 7)
+                          .map((d, i) => (
+                            <div
+                              key={i}
+                              className={`calendar-cell-kelola ${getDayClass(
+                                ruangan,
+                                d.day,
+                                d.isCurrentMonth,
+                              )}`}
+                              onClick={() =>
+                                d.isCurrentMonth &&
+                                handleDayClick(ruangan, d.day)
+                              }
+                            >
+                              <span className="calendar-number">{d.day}</span>
+                            </div>
+                          ))}
                       </div>
                     ))}
                   </div>
-
-                  {[0, 1, 2, 3, 4, 5].map((week) => (
-                    <div key={week} className="calendar-week">
-                      {calendarDays
-                        .slice(week * 7, week * 7 + 7)
-                        .map((d, i) => (
-                          <div
-                            key={i}
-                            className={`calendar-cell-kelola ${getDayClass(
-                              ruangan,
-                              d.day,
-                              d.isCurrentMonth
-                            )}`}
-                            onClick={() =>
-                              d.isCurrentMonth && handleDayClick(ruangan, d.day)
-                            }
-                          >
-                            <span className="calendar-number">{d.day}</span>
-                          </div>
-                        ))}
-                    </div>
-                  ))}
                 </div>
-              </div>
-            ))
+              ))
           )}
         </div>
       </div>

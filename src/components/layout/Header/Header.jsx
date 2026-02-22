@@ -11,6 +11,13 @@ import { useNavigate } from "react-router-dom";
 import BantuanAIModal from "../../modals/BantuanAIModal.jsx";
 import { useLocation } from "react-router-dom";
 import { menuItems } from "../../../constants/menuItems.jsx";
+import {
+  IS_KELURAHAN,
+  IS_RPTRA_CIPEDAK,
+  IS_RPTRA_CENDEKIA,
+  IS_RPTRA_CINTA_ASELIH,
+} from "../../../config/appConfig";
+
 import "./header.css";
 
 const Header = () => {
@@ -112,6 +119,7 @@ const Header = () => {
           onClick={() => setMenuOpen(false)}
         >
           <div className="mobile-sidebar" onClick={(e) => e.stopPropagation()}>
+            <div className="mobile-sidebar-title">Menu</div>
             {menuItems.map((item) => {
               const Icon = item.icon;
               const isActive =

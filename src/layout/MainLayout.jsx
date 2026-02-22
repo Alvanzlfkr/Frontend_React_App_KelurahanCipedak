@@ -2,6 +2,7 @@ import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
+import "./mainLayout.css";
 
 const MainLayout = () => {
   const [activeMenu, setActiveMenu] = useState("dashboard");

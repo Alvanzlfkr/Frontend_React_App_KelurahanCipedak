@@ -1,8 +1,21 @@
 /* ===== CONTAINER ===== */
+
+.layout-container-data-peminjam {
+  display: flex;
+}
+
+.main-content-data-peminjam {
+  margin-left: 300px; /* sesuai lebar sidebar */
+  width: 100%;
+  padding: 40px;
+}
+
 .tambah-data-container {
-  width: 1000px;
-  margin-left: 400px;
-  margin-top: 70px;
+  max-width: 1000px;
+  width: 100%;
+  display: block;
+  justify-content: center;
+  margin: 50px auto 0 auto;
   padding: 20px 20px;
 }
 
@@ -26,15 +39,7 @@
 }
 
 /* ===== FORM CARD ===== */
-.form-card {
-  background: white;
-  border-radius: 16px;
-  padding: 20px 40px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  max-width: 100%;
-  margin: 0 auto;
-  font-family: Arial, Helvetica, sans-serif;
-}
+/*  */
 
 /* ===== FORM ===== */
 .tambah-data-form {
@@ -337,7 +342,9 @@
 
 /* ===== SMOOTH TRANSITIONS ===== */
 * {
-  transition: background 0.2s ease, border 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border 0.2s ease;
 }
 
 /* ===== RESPONSIVE ===== */
@@ -345,6 +352,7 @@
 @media (max-width: 1024px) {
   .tambah-data-container {
     margin-left: 10px;
+    margin-right: 300px;
     max-width: 100%;
     width: 100%;
   }

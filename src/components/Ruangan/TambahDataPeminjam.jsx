@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { getModeParams } from "../../config/appConfig";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../../components/layout/Sidebar/Sidebar";
 import Header from "../../components/layout/Header/Header";
@@ -88,11 +89,12 @@ const TambahDataPeminjam = () => {
   // [BARU] FETCH DATA RUANGAN DARI API
   // ===================================
   useEffect(() => {
-    fetch("http://localhost:5000/api/ruangan")
+    const params = new URLSearchParams(getModeParams()).toString();
+    const url = `http://localhost:5000/api/ruangan?${params}`;
+
+    fetch(url)
       .then((res) => res.json())
-      .then((data) => {
-        setListRuangan(data);
-      })
+      .then((data) => setListRuangan(data))
       .catch((err) => console.error("Gagal ambil ruangan:", err));
   }, []);
 
@@ -114,7 +116,7 @@ const TambahDataPeminjam = () => {
     setBookedTimes([]);
 
     fetch(
-      `http://localhost:5000/api/peminjaman/cek?ruangan_id=${formData.ruangan}&tanggal_pinjam=${formData.tanggalPinjam}`
+      `http://localhost:5000/api/peminjaman/cek?ruangan_id=${formData.ruangan}&tanggal_pinjam=${formData.tanggalPinjam}`,
     )
       .then((res) => res.json())
       .then((data) => {
@@ -269,7 +271,7 @@ const TambahDataPeminjam = () => {
     if (isTimeDisabled(newValue)) {
       showSnackbar(
         "Jam ini tidak tersedia (sudah dipakai / jam istirahat)",
-        "warning"
+        "warning",
       );
       return;
     }
@@ -336,7 +338,7 @@ const TambahDataPeminjam = () => {
 
     if (startMin >= breakStart && startMin < breakEnd) {
       alert(
-        "Tidak bisa memulai peminjaman tepat di jam istirahat (12:00 - 13:00)."
+        "Tidak bisa memulai peminjaman tepat di jam istirahat (12:00 - 13:00).",
       );
       return false;
     }
@@ -384,7 +386,7 @@ const TambahDataPeminjam = () => {
       formData.tanggalPinjam &&
       dayjs(formData.tanggalKembaliBarang).isBefore(
         dayjs(formData.tanggalPinjam),
-        "day"
+        "day",
       )
     ) {
       newErrors.tanggalKembaliBarang =
@@ -433,7 +435,7 @@ const TambahDataPeminjam = () => {
     if (!/^08\d{8,11}$/.test(formData.noTelepon)) {
       showSnackbar(
         "Nomor WhatsApp harus diawali 08 dan minimal 10 digit",
-        "warning"
+        "warning",
       );
       return;
     }
@@ -467,9 +469,9 @@ const TambahDataPeminjam = () => {
   };
 
   return (
-    <div className="layout-container">
+    <div className="layout-container-data-peminjam">
       <Sidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
-      <div className="main-content">
+      <div className="main-content-data-peminjam">
         <Header />
 
         <div className="tambah-data-container">

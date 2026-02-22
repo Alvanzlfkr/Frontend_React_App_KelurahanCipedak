@@ -40,9 +40,9 @@ const EditPenanganan = () => {
   };
 
   return (
-    <div className="layout-container">
+    <div className="layout-container-penanganan">
       <Sidebar activeMenu="kelola-penanganan" />
-      <div className="main-content">
+      <div className="main-content-penanganan">
         <Header />
 
         {/* ✅ SAMA DENGAN TAMBAH */}

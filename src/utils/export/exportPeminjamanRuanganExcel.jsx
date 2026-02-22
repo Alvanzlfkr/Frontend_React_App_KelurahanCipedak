@@ -180,6 +180,16 @@ export const exportPeminjamanRuanganExcel = (
   });
 
   // ======================
+  // PAGE SETUP PRINT
+  // ======================
+  worksheet["!pageSetup"] = {
+    orientation: "landscape",
+    fitToWidth: 1,
+    fitToHeight: 0,
+    paperSize: 9, // A4
+  };
+
+  // ======================
   // 6. EXPORT
   // ======================
   const workbook = XLSX.utils.book_new();

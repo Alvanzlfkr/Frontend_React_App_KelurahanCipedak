@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
-
+import { APP_MODE } from "../../config/appConfig";
 import Sidebar from "../../components/layout/Sidebar/Sidebar";
 import Header from "../../components/layout/Header/Header";
 import RoomBookingCalendar from "../../components/Ruangan/RoomBookingCalendar";
@@ -77,9 +77,24 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchRoomData = async () => {
       try {
+        const params = new URLSearchParams();
+
+        if (APP_MODE === "kelurahan") {
+          params.append("mode", "kelurahan");
+        }
+
+        if (APP_MODE.startsWith("rptra")) {
+          params.append("mode", "rptra");
+
+          if (APP_MODE === "rptra_cipedak") params.append("kode", "CIPEDAK");
+          if (APP_MODE === "rptra_cendekia") params.append("kode", "CENDEKIA");
+          if (APP_MODE === "rptra_cinta_aselih")
+            params.append("kode", "ASELIH");
+        }
+
         const [roomRes, bookingRes] = await Promise.all([
-          fetch("http://localhost:5000/api/ruangan"),
-          fetch("http://localhost:5000/api/peminjaman"),
+          fetch(`http://localhost:5000/api/ruangan?${params.toString()}`),
+          fetch(`http://localhost:5000/api/peminjaman?${params.toString()}`),
         ]);
 
         setRooms(await roomRes.json());

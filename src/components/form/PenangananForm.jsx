@@ -6,6 +6,7 @@ const ALL_JABATAN = ["Lurah", "Sekretaris"];
 const PenangananForm = ({
   initialData,
   onSubmit,
+  onCancel, // ✅ TAMBAHKAN INI
   submitLabel,
   jabatanTerisi = [],
   isEdit = false,
@@ -111,10 +112,6 @@ const PenangananForm = ({
     }));
   };
 
-  const handleCancel = () => {
-    navigate("/kelola-penanganan");
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
@@ -195,7 +192,7 @@ const PenangananForm = ({
         <button type="submit" className="btn-submit">
           {submitLabel}
         </button>
-        <button type="button" onClick={handleCancel} className="btn-cancel">
+        <button type="button" onClick={onCancel} className="btn-cancel">
           Batal
         </button>
       </div>

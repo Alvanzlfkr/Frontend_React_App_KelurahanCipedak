@@ -11,7 +11,7 @@ import "./TambahPenanganan.css";
 
 const EditPenanganan = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // ✅ WAJIB ADA
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const EditPenanganan = () => {
       })
       .catch(() => {
         alert("Data tidak ditemukan");
-        navigate("/kelola-penanganan");
+        navigate("/kelola-penanganan"); // ✅ sekarang aman
       });
   }, [id, navigate]);
 
@@ -36,7 +36,7 @@ const EditPenanganan = () => {
   };
 
   const handleCancel = () => {
-    navigate("/kelola-penanganan");
+    navigate("/kelola-penanganan"); // ✅ ini juga sekarang aman
   };
 
   return (
@@ -45,7 +45,6 @@ const EditPenanganan = () => {
       <div className="main-content-penanganan">
         <Header />
 
-        {/* ✅ SAMA DENGAN TAMBAH */}
         <div className="tambah-penanganan-container">
           <h1 className="title-penanganan">Edit Penanganan</h1>
 
@@ -54,7 +53,7 @@ const EditPenanganan = () => {
               initialData={data}
               submitLabel="Update"
               onSubmit={handleSubmit}
-              onCancel={handleCancel}
+              onCancel={handleCancel} // ✅ sekarang ada functionnya
               isEdit={true}
             />
           )}
